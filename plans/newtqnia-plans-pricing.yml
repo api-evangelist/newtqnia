@@ -1,0 +1,73 @@
+generated: '2026-08-28'
+method: searched
+source: https://newtqnia.com/en/developers and https://newtqnia.com/en/connect
+note: >-
+  NewTqnia publishes NO pricing page - https://newtqnia.com/en/pricing returns 404. Both
+  programmable surfaces are advertised as free, and both were reachable in our probe, so
+  this is a genuinely free offering rather than an undisclosed one. The tiers below are
+  the access levels the provider describes, not priced plans.
+
+plans:
+- name: Public API
+  price: 0
+  currency: USD
+  billing_period: none
+  signup_required: false
+  source: https://newtqnia.com/en/developers
+  description: >-
+    "Public & free" read-only JSON REST access to /v1/news/today and /v1/news/latest. No
+    API key required for the initial release.
+  quota:
+    documented: 60 requests per minute per IP
+    observed_header: 'x-ratelimit-limit: 20'
+    max_articles_per_call: 10
+  overage: null
+  conditions:
+  - Display "Powered by NewTqnia" with a visible link when presenting API content.
+  - Preserve the article URLs returned by the API (including their utm parameters).
+  - Do not republish full article text, remove attribution, or evade rate limits.
+  terms: https://newtqnia.com/en/terms
+
+- name: Registered reader (API key / MCP)
+  price: 0
+  currency: USD
+  billing_period: none
+  signup_required: true
+  signup: https://newtqnia.com/en/register
+  source: https://newtqnia.com/en/connect
+  description: >-
+    "Free for every registered reader." A NewTqnia account yields up to 5 personal
+    ntq_ API keys, which unlock the hosted MCP server for ChatGPT, Claude or any MCP
+    client, plus optional usage attribution on the REST API.
+  quota:
+    max_active_keys: 5
+    mcp_rate_limit_header_observed: 'x-ratelimit-limit: 120'
+  scope: Published content only, single locale, read-only. Never full article bodies.
+  overage: null
+
+- name: Editor / administrator
+  price: null
+  currency: null
+  billing_period: null
+  signup_required: true
+  source: https://newtqnia.com/llms.txt
+  description: >-
+    Internal editorial role, not a purchasable tier. Grants the complete bilingual record
+    and a content-drafting workflow over MCP via OAuth 2.1 with PKCE and the mcp:write
+    scope. Listed for completeness because the MCP tool descriptions reference it; there
+    is no public path to obtain it.
+  publicly_available: false
+
+plan_count: 3
+paid_plan_count: 0
+pricing_page: null
+pricing_page_status: 404
+pricing_model: free-with-attribution
+gaps:
+- >-
+  No pricing page exists (https://newtqnia.com/en/pricing -> 404), and no commercial or
+  higher-volume tier is offered. The docs describe the keyless mode as free "for the
+  initial release", which signals the terms may change but publishes no successor plan.
+- >-
+  There is no stated SLA, support commitment or paid path for a business that wants a
+  quota above 60/min.

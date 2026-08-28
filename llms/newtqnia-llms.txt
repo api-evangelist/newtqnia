@@ -1,0 +1,70 @@
+# NewTqnia
+
+> NewTqnia is an independent bilingual technology newsroom publishing English and Arabic reporting on artificial intelligence, cybersecurity, developer tools, science, and global innovation.
+
+Use the localized canonical article pages as the authoritative source. Article dates use UTC. Cite NewTqnia and link to the canonical article when using its reporting.
+
+## Primary resources
+
+- [English newsroom](https://newtqnia.com/en): Latest English technology coverage.
+- [Arabic newsroom](https://newtqnia.com/ar): Latest Arabic technology coverage.
+- [Expanded AI index](https://newtqnia.com/llms-full.txt): Recent bilingual article summaries and machine-readable article links.
+- [English RSS feed](https://newtqnia.com/en/feed.xml): The latest published articles.
+- [Arabic RSS feed](https://newtqnia.com/ar/feed.xml): The latest published articles in Arabic.
+- [XML sitemap](https://newtqnia.com/sitemap.xml): All public pages and articles.
+- [Google News sitemap](https://newtqnia.com/news-sitemap.xml): Articles published in the last 48 hours.
+
+## Recent reporting
+
+- [Judge Rules the Pentagon’s Anthropic Blacklist Unlawful](https://newtqnia.com/en/news/210-judge-rules-the-pentagons-anthropic-blacklist-unlawful.md): A federal judge ruled that the Pentagon unlawfully retaliated against Anthropic by labeling it a national-security supply-chain risk after a dispute over autonomous weapons and domestic surveillance. The decision blocks the designation and strengthens suppliers’ due-process protections, but the government may appeal and a related case remains pending.
+- [Coral Records Suggest El Niño Has Strengthened 36%](https://newtqnia.com/en/news/209-coral-records-suggest-el-nino-has-strengthened-36.md): A 900-year Galápagos coral reconstruction suggests eastern Pacific El Niño variability is about 36% stronger than before industrial warming, including a 16% increase during the past 40 years. The evidence extends beyond short instrument records, although outside scientists dispute whether the corals isolate El Niño from background ocean warming.
+- [Cyborg Cockroaches Delivered Injections in a Rescue Test](https://newtqnia.com/en/news/208-cyborg-cockroaches-delivered-injections-in-a-rescue-test.md): Australian researchers equipped giant cockroaches with steering electrodes, cameras and miniature injectors, achieving a 72% overall delivery success rate in laboratory rescue tests. The biohybrid system could eventually reach trapped casualties, but it has only injected silicone targets and pig skin under controlled conditions.
+- [A Mile-Deep Dark Matter Experiment Has Started Taking Data](https://newtqnia.com/en/news/207-a-mile-deep-dark-matter-experiment-has-started-taking-data.md): SuperCDMS SNOLAB has begun collecting its first scientific data from ultra-cold silicon and germanium detectors more than a mile underground in Canada. The early run may constrain light dark matter, but it is also a commissioning phase before the experiment’s optimized year-long search begins in 2027.
+- [Meta Will Pay Up to $18 Billion and Limit Teens’ Instagram Time](https://newtqnia.com/en/news/206-meta-will-pay-up-to-18-billion-and-limit-teens-instagram-time.md): Meta will pay up to $18 billion and impose new limits on how minors use Instagram and Facebook under settlements with nearly all U.S. states. The changes include a two-hour daily cap, overnight blocking and stronger age checks, though personalized recommendations and targeted advertising remain.
+- [The FBI Disabled Hacking Tools That Hid Behind Infected Routers](https://newtqnia.com/en/news/205-the-fbi-disabled-hacking-tools-that-hid-behind-infected-routers.md): U.S. authorities seized three domains and disabled QScan and QTRouter, tools allegedly used by a China-linked group to scan targets and conceal attacks behind infected devices. The action disrupted the platforms, but did not arrest their operators or reveal the full impact of every reported intrusion.
+- [A Pancreatic Cancer Drug That Doubled Median Survival Is Now Approved](https://newtqnia.com/en/news/204-a-pancreatic-cancer-drug-that-doubled-median-survival-is-now-approved.md): The FDA approved daraxonrasib for defined groups of adults with metastatic pancreatic adenocarcinoma after a 500-person trial doubled median survival versus chemotherapy. The once-daily RAS inhibitor is not a cure, carries serious risks and has a list price near $39,800 per month.
+- [Xbox Will Let Physical Discs Unlock Digital Games](https://newtqnia.com/en/news/203-xbox-will-let-physical-discs-unlock-digital-games.md): Xbox is testing a system that lets supported physical discs unlock digital access across consoles, PCs and cloud devices. The entitlement follows the disc, preserving lending and resale, but publisher participation, game coverage and the broader release date remain uncertain.
+- [A European Bank Lets AI Assistants Handle Trades, With Your Approval](https://newtqnia.com/en/news/202-a-european-bank-lets-ai-assistants-handle-trades-with-your-approval.md): Scalable Capital customers can now connect outside AI assistants to analyse portfolios, prepare orders and manage savings plans through natural-language prompts. Every trade still needs explicit approval, and the bank says the assistants operate outside its control, leaving performance and security questions unresolved.
+- [Australia Bars Fully AI-Made Songs From Its Music Charts](https://newtqnia.com/en/news/201-australia-bars-fully-ai-made-songs-from-its-music-charts.md): Australia's main music charts will exclude recordings made wholly by generative AI from August 31, while songs that use AI as a supporting tool may still qualify. The rule protects a place for human authorship, but ARIA still has to judge what counts as substantially human made.
+- [College Baseball Is Adding Pitch Challenges and Bat Sensors](https://newtqnia.com/en/news/200-college-baseball-is-adding-pitch-challenges-and-bat-sensors.md): New NCAA rules will let college baseball teams challenge ball and strike calls with tracking technology and collect swing data from sensors attached to bats. The options begin in the 2027 season, but schools need compatible systems, and human umpires will still make the original calls.
+- [Ukraine's Ground Robots Completed 100,000 Frontline Missions This Year](https://newtqnia.com/en/news/199-ukraines-ground-robots-completed-100000-frontline-missions-this-year.md): Ukraine says unmanned ground vehicles completed more than 100,000 logistics and evacuation missions from January through August 20, with monthly use nearly tripling since January. The records show large-scale battlefield deployment, although they do not reveal success rates, robot losses or how many missions directly replaced a person.
+- [Britain Gets Five Million Battlefield Images to Train Military AI](https://newtqnia.com/en/news/198-britain-gets-five-million-battlefield-images-to-train-military-ai.md): Britain has become the first foreign partner admitted to Ukraine's Avengers AI Labs, a platform built around five million annotated battlefield frames. The signed agreement opens joint military-AI work and two early pilots, but its headline detection rate comes from Ukraine's defence ministry and lacks an independent public audit.
+- [A Plastic Mold Helped Make a 15.7-Pound Metal Part Without Welding](https://newtqnia.com/en/news/197-a-plastic-mold-helped-make-a-157-pound-metal-part-without-welding.md): Oak Ridge National Laboratory and A.J. Tuck used a printed plastic form, electroforming and high-pressure processing to make five leak-free nickel containers and one solid 15.7-pound component. The result could simplify difficult reactor-part manufacturing, but only simple cylinders have completed the full process.
+- [A Fruit-Fly Brain Inspired an AI That Learns New Smells Without Forgetting](https://newtqnia.com/en/news/196-a-fruit-fly-brain-inspired-an-ai-that-learns-new-smells-without-forgetting.md): A fruit-fly-inspired algorithm learned scent categories from limited examples and added new odors while retaining earlier ones. Its sparse spiking design could suit adaptable artificial noses, but the research tested software on two datasets, not a complete sensor or measured low-power device.
+- [A Methanol Plant Could Take Carbon and Water From the Air](https://newtqnia.com/en/news/195-a-methanol-plant-could-take-carbon-and-water-from-the-air.md): A global model suggests green methanol plants could collect both carbon dioxide and process water from ambient air in 97 percent of the water-stressed regions studied. The result could ease freshwater competition, but no integrated commercial plant has yet proved the concept or its local environmental safety.
+- [Researchers Made a Cookie From Plastic Waste, but Nobody Has Tasted It Yet](https://newtqnia.com/en/news/194-researchers-made-a-cookie-from-plastic-waste-but-nobody-has-tasted-it-yet.md): Engineered yeasts converted chemicals from PET bottles and crop waste into proteins, beta-carotene and vanilla flavoring for a 3D-printed cookie. The NASA-backed prototype could recycle waste into food in remote places, but it has not received approval for human taste tests and the results are not yet peer reviewed.
+- [New Zealand Proposes a Social Media Ban for Children Under 16](https://newtqnia.com/en/news/193-new-zealand-proposes-a-social-media-ban-for-children-under-16.md): New Zealand's government introduced a bill that would require major social networks to keep children under 16 off their platforms and assess risks to young users. Companies could face fines tied to global revenue, but the proposal lacks enough parliamentary support and cannot pass before the coming election.
+- [China Delayed Its Moon-Ice Mission Just Before Launch](https://newtqnia.com/en/news/192-china-delayed-its-moon-ice-mission-just-before-launch.md): China postponed Chang'e 7 after concluding that the mission did not meet launch conditions, even though its rocket and spacecraft had reached the launch area. The probe was meant to search shadowed lunar craters for water ice, but officials disclosed neither the problem nor a replacement date.
+- [China Is Recalling 4.3 Million Cars Over Hidden Door Handles](https://newtqnia.com/en/news/191-china-is-recalling-43-million-cars-over-hidden-door-handles.md): China has ordered its largest vehicle recall, covering about 4.3 million cars whose emergency door releases may be difficult to find or use after a severe crash. Automakers will add clearer markings and software changes, but the campaign also exposes a physical safety problem created by electronic car design.
+
+## Topics
+
+- [Artificial Intelligence](https://newtqnia.com/en/categories/artificial-intelligence): الذكاء الاصطناعي
+- [Biomanufacturing](https://newtqnia.com/en/categories/biomanufacturing): التصنيع الحيوي
+- [Climate Technology](https://newtqnia.com/en/categories/climate-technology): تقنيات المناخ
+- [Energy](https://newtqnia.com/en/categories/energy): الطاقة
+- [Gaming Technology](https://newtqnia.com/en/categories/gaming-technology): تقنيات الألعاب
+- [Health](https://newtqnia.com/en/categories/health): الصحة
+- [Robotics](https://newtqnia.com/en/categories/robotics): الروبوتات
+- [Science](https://newtqnia.com/en/categories/science): العلوم
+- [Space](https://newtqnia.com/en/categories/space): الفضاء
+- [Sports Technology](https://newtqnia.com/en/categories/sports-technology): تقنيات الرياضة
+- [Technology Policy](https://newtqnia.com/en/categories/technology-policy): سياسات التقنية
+
+## Reference
+
+- [Technology glossary](https://newtqnia.com/en/terminology): Bilingual definitions for technical terms used across our reporting.
+- [Explainers](https://newtqnia.com/en/explainers): Bilingual explainer articles answering recurring technology questions.
+- [Story timelines](https://newtqnia.com/en/timelines): Ongoing developing stories as sourced, dated event sequences.
+
+## Programmatic access
+
+- [MCP server](https://newtqnia.com/mcp): Streamable HTTP Model Context Protocol endpoint for AI agents. Any signed-in reader can authenticate with a personal API key (see [Connect an AI assistant](https://newtqnia.com/en/connect)) for read-only, single-locale summaries of published news, timelines, terminology, and explainers, each with a canonical link to the full page. Editors and administrators get the complete bilingual record and a content-drafting workflow via OAuth 2.1 with PKCE; discovery document at https://newtqnia.com/.well-known/oauth-protected-resource.
+- [Connect an AI assistant](https://newtqnia.com/en/connect): How to link ChatGPT, Claude, or any MCP-compatible client to NewTqnia using your own API key.
+- [Developer API](https://newtqnia.com/en/developers): Public read-only JSON API for news at https://api.newtqnia.com/v1. No API key required for the initial release.
+- [OpenAPI specification](https://newtqnia.com/openapi.yaml): Machine-readable schema for the Developer API.
+
+## Optional
+
+- [About NewTqnia](https://newtqnia.com/en/about): Editorial purpose and coverage.
+- [Contact NewTqnia](https://newtqnia.com/en/contact): Corrections, questions, and editorial contact.

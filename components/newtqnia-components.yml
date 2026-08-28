@@ -1,0 +1,59 @@
+generated: '2026-08-28'
+method: searched
+source: https://newtqnia.com/en/widget
+description: >-
+  NewTqnia publishes one embeddable client-side component - a configurable news widget -
+  distributed both as a single script tag and as a WordPress plugin. It is distinct from
+  the SDKs in packages/: the SDKs call the API from server or app code, the widget
+  renders finished, style-isolated news cards inside someone else's page.
+
+families:
+- name: News Widget
+  kind: embeddable-widget
+  docs: https://newtqnia.com/en/widget
+  docs_ar: https://newtqnia.com/ar/widget
+  loader: https://newtqnia.com/news-widget.js
+  loader_status: 200
+  install: '<script src="https://newtqnia.com/news-widget.js"></script>'
+  isolation: >-
+    The provider states the widget is responsive and isolated from host-page styles.
+  configuration_surface:
+    content:
+    - heading (optional; blank uses the default)
+    - news count
+    - language (English | العربية)
+    - category (all, or one of 11 published category slugs)
+    - article ordering (latest first | most popular)
+    appearance:
+    - card style (cards | list | compact)
+    - orientation (horizontal | vertical)
+    - theme (automatic | light | dark)
+    - accent color
+    - show images (article thumbnails)
+    - show summaries
+  builder: >-
+    https://newtqnia.com/en/widget is a live configurator - settings update a preview and
+    emit the copyable embed line.
+  csp_requirement: >-
+    The provider documents that a host site with a Content Security Policy must allow
+    newtqnia.com for scripts, connections and images.
+  distributions:
+  - channel: script-tag
+    url: https://newtqnia.com/news-widget.js
+    versioned: false
+    note: Unpinned - the URL always serves the current build.
+  - channel: wordpress
+    url: https://wordpress.org/plugins/newtqnia-news-widget/
+    version: 1.0.0
+    updated: '2026-08-01'
+    requires: WordPress 6.3+
+    tested_to: '7.0.4'
+
+component_count: 1
+gaps:
+- >-
+  The widget loader is served unversioned from the site root, so an embedder cannot pin a
+  build or roll back. No integrity hash (SRI) is published with the documented embed line.
+- >-
+  No web-component custom-element name or programmatic JS API is documented; the widget is
+  configured through the hosted builder rather than through published attributes.

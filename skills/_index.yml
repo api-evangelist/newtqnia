@@ -1,0 +1,29 @@
+generated: '2026-08-28'
+method: generated
+source: >-
+  openapi/newtqnia-daily-digest-api.yaml, mcp/newtqnia-mcp-tools.json,
+  https://newtqnia.com/en/developers and https://newtqnia.com/en/connect
+note: >-
+  No provider-published Agent Skills or AGENTS.md was found; these are generated from the
+  provider's real contract and documentation. Every operationId and tool name below was
+  read from the live artifacts - none is invented.
+skills:
+- name: newtqnia-daily-digest
+  file: newtqnia-daily-digest.md
+  api: NewTqnia Daily Digest API
+  surface: rest
+  operations: [getTodaysNews, getLatestNews]
+  summary: >-
+    Fetch the keyless bilingual news digest, handle the empty-today case, respect the
+    Asia/Dubai day boundary, and render it with the mandatory "Powered by NewTqnia"
+    attribution and unmodified article URLs.
+- name: newtqnia-mcp-research
+  file: newtqnia-mcp-research.md
+  api: NewTqnia MCP
+  surface: mcp
+  operations: [server_status, get_recent_news, get_news_by_id, get_timeline_by_id, search_terminology, search_explainers]
+  summary: >-
+    Authenticate to the hosted MCP server, manage the required Mcp-Session-Id, and reach
+    the four content types (articles, timelines, terminology, explainers) that the REST
+    contract does not expose.
+skill_count: 2

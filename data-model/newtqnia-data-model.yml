@@ -1,0 +1,211 @@
+generated: '2026-08-28'
+method: derived
+source: >-
+  openapi/newtqnia-daily-digest-api.yaml ($ref graph + required fields) and
+  mcp/newtqnia-mcp-tools.json (outputSchema of every live MCP tool)
+note: >-
+  The REST contract and the MCP tool outputSchemas describe the SAME content core from two
+  angles, and the MCP side is materially richer - it names four entities the REST contract
+  never mentions. Entities are marked with the surface(s) that expose them.
+
+entities:
+- name: Digest
+  surface: [rest]
+  description: >-
+    A localized response envelope wrapping one collection of articles. Not a stored
+    record - it is the response document itself, carrying its own provenance
+    (api_version, timezone, locale, direction, generated_at) and its licence terms
+    (publisher, attribution).
+  identifier: none
+  required: [api_version, collection, timezone, locale, direction, publisher, attribution, generated_at, articles, _links]
+  fields:
+  - {name: api_version, type: string, const: v1}
+  - {name: collection, type: string, enum: [today, latest]}
+  - {name: date, type: string, format: date}
+  - {name: timezone, type: string, const: Asia/Dubai}
+  - {name: locale, type: string, enum: [en, ar]}
+  - {name: direction, type: string, enum: [ltr, rtl]}
+  - {name: generated_at, type: string, format: date-time}
+
+- name: Article
+  surface: [rest, mcp]
+  description: A published news story.
+  identifier: id
+  id_type: integer
+  id_prefix: none
+  required_rest: [id, title, summary, category, image, url, published_at, read_time]
+  fields_rest:
+  - {name: id, type: integer}
+  - {name: title, type: string}
+  - {name: summary, type: string}
+  - {name: image, type: string, format: uri}
+  - {name: url, type: string, format: uri, note: Carries utm_source=newtqnia_api tracking that the terms require be preserved.}
+  - {name: published_at, type: string, format: date-time}
+  - {name: read_time, type: integer, minimum: 1, note: Estimated minutes to read.}
+  fields_mcp_only:
+  - {name: slug, type: string}
+  - {name: title_en, type: string, access: administrator}
+  - {name: title_ar, type: string, access: administrator}
+  - {name: summary_en, type: string, access: administrator}
+  - {name: summary_ar, type: string, access: administrator}
+  - {name: body_en, type: string, access: administrator}
+  - {name: body_ar, type: string, access: administrator}
+  - {name: status, type: string, enum: [draft, published], access: administrator}
+  - {name: source, type: string, enum: [fresh, archived]}
+  - {name: editable, type: boolean}
+  - {name: view_count, type: integer}
+  - {name: created_at, type: string, format: date-time}
+  - {name: updated_at, type: string, format: date-time}
+  - {name: url_en, type: string, format: uri}
+  - {name: url_ar, type: string, format: uri}
+  - {name: image_path, type: string}
+  - {name: category_id, type: integer, note: The explicit foreign key, exposed only over MCP.}
+
+- name: Category
+  surface: [rest, mcp]
+  description: >-
+    Editorial taxonomy term. Reduced to {slug, name} for non-administrator tokens; the
+    full taxonomy record is returned to administrators.
+  identifier: slug
+  secondary_identifier: id
+  required: [slug, name]
+  known_values: [artificial-intelligence, biomanufacturing, climate-technology, energy, gaming-technology, health, robotics, science, space, sports-technology, technology-policy]
+  values_source: https://newtqnia.com/llms.txt Topics section (11 published categories)
+
+- name: Tag
+  surface: [mcp]
+  description: Free-form keyword attached to an article. Returned as an object array.
+  identifier: unspecified
+
+- name: Citation
+  surface: [mcp]
+  description: >-
+    A source reference behind an article - the newsroom's provenance trail. Notable: this
+    is a first-class, machine-readable entity, which is rare for a news API.
+  identifier: id
+  required: [title, url]
+  fields:
+  - {name: id, type: integer}
+  - {name: title, type: string}
+  - {name: url, type: string, format: uri}
+
+- name: Timeline
+  surface: [mcp]
+  description: >-
+    A developing story as a dated, sourced sequence of events. Web surface at
+    https://newtqnia.com/en/timelines.
+  identifier: id
+  secondary_identifier: uuid
+  required: [id, slug, timeline_type, is_ongoing, start_date, end_date, event_count, events, created_at, updated_at]
+  fields:
+  - {name: timeline_type, type: string}
+  - {name: featured, type: boolean}
+  - {name: is_ongoing, type: boolean}
+  - {name: start_date, type: [string, 'null'], format: date}
+  - {name: end_date, type: [string, 'null'], format: date}
+  - {name: event_count, type: integer}
+  - {name: introduction_en, type: [string, 'null'], access: administrator}
+  - {name: conclusion_en, type: [string, 'null'], access: administrator}
+  - {name: cover_media, type: [object, 'null']}
+
+- name: TimelineEvent
+  surface: [mcp]
+  description: >-
+    One dated entry inside a Timeline, with title, summary, media, sources and related
+    links. Typed only as `object` in the tool outputSchema.
+  identifier: unspecified
+  parent: Timeline
+
+- name: TerminologyTerm
+  surface: [mcp]
+  description: >-
+    A bilingual glossary entry. Web surface at https://newtqnia.com/en/terminology.
+  identifier: id
+  secondary_identifier: slug
+  required: [id, slug]
+  fields:
+  - {name: english_term, type: string}
+  - {name: arabic_term, type: string}
+  - {name: term, type: string, note: Single-locale projection for non-administrator tokens.}
+  - {name: abbreviation, type: [string, 'null']}
+  - {name: status, type: string, enum: [draft, published]}
+  - {name: url, type: string, format: uri}
+
+- name: Explainer
+  surface: [mcp]
+  description: >-
+    An evergreen article answering a recurring technology question. Web surface at
+    https://newtqnia.com/en/explainers.
+  identifier: id
+  secondary_identifier: slug
+  required: [id, slug]
+  fields:
+  - {name: title_en, type: string}
+  - {name: title_ar, type: string}
+  - {name: summary_en, type: [string, 'null']}
+  - {name: status, type: string, enum: [draft, published]}
+  - {name: url, type: string, format: uri}
+
+- name: LinkLabel
+  surface: [rest]
+  description: A {name, url} pair used for the publisher reference in a Digest.
+  identifier: none
+  required: [name, url]
+
+relationships:
+- from: Digest
+  to: Article
+  type: has_many
+  via: articles
+  binding: $ref
+- from: Digest
+  to: LinkLabel
+  type: has_one
+  via: publisher
+  binding: $ref
+- from: Article
+  to: Category
+  type: belongs_to
+  via: category
+  binding: embedded-object
+  foreign_key: category_id
+  foreign_key_surface: mcp
+- from: Article
+  to: Tag
+  type: has_many
+  via: tags
+  binding: embedded-array
+  surface: mcp
+- from: Article
+  to: Citation
+  type: has_many
+  via: citations
+  binding: embedded-array
+  surface: mcp
+- from: Timeline
+  to: TimelineEvent
+  type: has_many
+  via: events
+  binding: embedded-array
+  count_field: event_count
+  surface: mcp
+
+identifier_scheme:
+  style: bare-integer
+  prefixed: false
+  note: >-
+    All primary keys are plain incrementing integers (article 210 was the newest at probe
+    time), with a human slug alongside. There is no typed or prefixed id scheme, so an
+    agent holding a bare integer cannot tell an article id from a timeline id - the two
+    live in separate namespaces and both start at 1.
+
+locale_projection:
+  pattern: >-
+    Bilingual fields are stored as parallel *_en / *_ar columns and PROJECTED to an
+    unsuffixed field (title, summary, url) for single-locale callers. Administrator tokens
+    receive both suffixed forms instead. The same record therefore has two different
+    JSON shapes depending on who asks.
+
+entity_count: 10
+rest_entity_count: 4
+mcp_only_entity_count: 6

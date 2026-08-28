@@ -1,0 +1,121 @@
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://newtqnia.com/en/developers (official SDK section) verified against
+  registry.npmjs.org, pypi.org, repo.packagist.org, proxy.golang.org, jsr.io and
+  api.github.com/users/newtqnia
+note: >-
+  All four first-party SDKs exist, are MIT-licensed, are published under a NewTqnia-owned
+  namespace, and point their homepage back at https://newtqnia.com/en/developers. The
+  GitHub namespace is a USER account (github.com/newtqnia, type: User, 4 public repos),
+  not an organization - api.github.com/orgs/newtqnia returns 404.
+
+packages:
+- name: newtqnia
+  language: python
+  registry: pypi
+  official: true
+  url: https://pypi.org/project/newtqnia/
+  repository: https://github.com/newtqnia/newtqnia-python
+  install: pip install newtqnia
+  version: 1.0.1
+  published: '2026-08-21'
+  license: MIT
+  requires: Python 3.10+
+  note: >-
+    Sync and async clients, typed models, safe retries, and attributed HTML/JSON-LD
+    rendering that preserves the required "Powered by NewTqnia" link. Ships a
+    CHANGELOG.md in the repo.
+
+- name: newtqnia-node
+  language: javascript
+  registry: npm
+  official: true
+  url: https://www.npmjs.com/package/newtqnia-node
+  repository: https://github.com/newtqnia/newtqnia-node
+  install: npm install newtqnia-node
+  version: 2.0.0
+  published: '2026-07-26'
+  license: MIT
+  requires: Node.js 18+
+  note: TypeScript-first, ESM + CommonJS, strong types, safe retries.
+
+- name: '@newtqnia/newtqnia-node'
+  language: typescript
+  registry: jsr
+  official: true
+  url: https://jsr.io/@newtqnia/newtqnia-node
+  repository: https://github.com/newtqnia/newtqnia-node
+  install: npx jsr add @newtqnia/newtqnia-node
+  version: 2.0.0
+  published: '2026-07-26'
+  license: MIT
+  note: >-
+    Same source as the npm package, dual-published to JSR. Version parity with npm at
+    the time of probing.
+
+- name: newtqnia/php
+  language: php
+  registry: packagist
+  official: true
+  url: https://packagist.org/packages/newtqnia/php
+  repository: https://github.com/newtqnia/newtqnia-php
+  install: composer require newtqnia/php guzzlehttp/guzzle
+  version: v1.0.0
+  published: '2026-07-26'
+  license: MIT
+  requires: PHP 8.2+
+  note: Typed PHP objects with first-class Laravel support.
+
+- name: github.com/newtqnia/newtqnia-go
+  language: go
+  registry: go
+  official: true
+  url: https://pkg.go.dev/github.com/newtqnia/newtqnia-go
+  repository: https://github.com/newtqnia/newtqnia-go
+  install: go get github.com/newtqnia/newtqnia-go@latest
+  version: v1.0.0
+  published: '2026-08-21'
+  license: MIT
+  requires: Go 1.22+
+  note: Dependency-free; typed responses, context cancellation, timeouts, safe retries.
+
+- name: newtqnia-news-widget
+  language: php
+  registry: wordpress
+  official: true
+  url: https://wordpress.org/plugins/newtqnia-news-widget/
+  repository: null
+  install: WordPress plugin directory
+  version: 1.0.0
+  published: '2026-08-01'
+  license: null
+  note: >-
+    WordPress plugin wrapping the embeddable news widget. Published by WordPress.org
+    profile `samymassoud`, linked as official from https://newtqnia.com/en/widget.
+    Requires WP 6.3+, tested to 7.0.4. Treated as a distribution channel for the
+    embeddable component - see components/newtqnia-components.yml.
+
+- name: news-widget.js
+  language: javascript
+  registry: cdn
+  official: true
+  url: https://newtqnia.com/news-widget.js
+  repository: null
+  install: '<script src="https://newtqnia.com/news-widget.js"></script>'
+  version: null
+  published: null
+  note: >-
+    Self-hosted loader served from the provider's own origin (HTTP 200,
+    application/javascript, 12,386 bytes). The URL carries NO version pin and there is no
+    registry metadata endpoint to query, so a consumer cannot determine which build they
+    are executing or pin against a regression. version/published are null because the
+    distribution is unpinned, not because they were not checked.
+
+sdk_count: 5
+official_sdk_count: 5
+languages: [python, javascript, typescript, php, go]
+currency_note: >-
+  Every first-party SDK was published within roughly a month of this probe (2026-07-26 to
+  2026-08-21) against an API contract at version 1.1.0 - no abandonment signal. The two
+  most recent releases (Python 1.0.1, Go v1.0.0) both landed 2026-08-21.

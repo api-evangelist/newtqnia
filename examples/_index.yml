@@ -1,0 +1,31 @@
+generated: '2026-08-28'
+method: probed
+source: Live unauthenticated calls to https://api.newtqnia.com on 2026-08-28
+note: >-
+  The published OpenAPI contract carries NO examples - no `example`, `examples` or default
+  values on any schema or response. These are real captured responses, saved verbatim, so
+  an agent or a generated client has a concrete payload to work against.
+examples:
+- file: newtqnia-getTodaysNews-200.json
+  operationId: getTodaysNews
+  request: 'GET https://api.newtqnia.com/v1/news/today?locale=en&limit=2'
+  status: 200
+  content_type: application/json
+  note: >-
+    Shows the full Digest envelope including the `usage` object that is present live but
+    absent from the schema, and article URLs with their required utm parameters.
+- file: newtqnia-getLatestNews-200-ar.json
+  operationId: getLatestNews
+  request: 'GET https://api.newtqnia.com/v1/news/latest?locale=ar&limit=2'
+  status: 200
+  content_type: application/json
+  note: Arabic locale, demonstrating direction:rtl and the RTL projection of title/summary.
+- file: newtqnia-error-404.json
+  operationId: null
+  request: 'GET https://api.newtqnia.com/v1/news/nope'
+  status: 404
+  content_type: application/json
+  note: >-
+    The error envelope, which is declared nowhere in the contract. Captured so the shape
+    is at least recorded somewhere machine-readable.
+example_count: 3

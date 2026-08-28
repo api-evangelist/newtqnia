@@ -1,0 +1,77 @@
+generated: '2026-08-28'
+method: probed
+source: live GET of /.well-known/* on every apis.yml + OpenAPI servers[] host
+hosts:
+- host: newtqnia.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: newtqnia-oauth-authorization-server.json
+    note: >-
+      RFC 8414 authorization-server metadata for the MCP OAuth 2.1 flow. Real JSON
+      document: issuer https://newtqnia.com, authorization_code + refresh_token grants,
+      PKCE S256 required, scopes mcp:read / mcp:write, iss response parameter supported.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: newtqnia-oauth-protected-resource.json
+    note: >-
+      RFC 9728 protected-resource metadata naming https://newtqnia.com/mcp as the
+      resource and https://newtqnia.com as its authorization server. This is the
+      document the llms.txt points MCP clients at.
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: HTML 404 page returned; no RFC 9116 document served.
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: HTML 404 page. OAuth 2.1 metadata is served, OIDC discovery is not.
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    note: HTML 404 page; no RFC 9727 API catalog.
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    note: HTML 404 page.
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: HTML 404 page; no A2A agent card.
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: HTML 404 page; legacy pre-0.3 A2A path also absent.
+- host: api.newtqnia.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: 'JSON error envelope: {"error":{"code":"not_found",...}}'
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+    note: JSON 404. OAuth metadata lives on the newtqnia.com apex only.
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: JSON 404.
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: JSON 404.
+
+summary:
+  documents_served: 2
+  documents_absent: 10
+  gaps:
+  - >-
+    No /.well-known/security.txt on either host. This is the single cheapest
+    agent-readiness and vulnerability-disclosure win available to NewTqnia - the site
+    already publishes a contact page that could be the Contact: value.
+  - >-
+    No /.well-known/api-catalog, even though the provider publishes an OpenAPI, an MCP
+    server and an llms.txt that a catalog document could tie together.
+  - >-
+    /.well-known/openid-configuration is absent; only the OAuth 2.1 authorization-server
+    document is served, which is correct and sufficient for MCP but not OIDC.

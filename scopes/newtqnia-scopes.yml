@@ -1,0 +1,49 @@
+generated: '2026-08-28'
+method: probed
+source: https://newtqnia.com/.well-known/oauth-authorization-server (HTTP 200) and https://newtqnia.com/.well-known/oauth-protected-resource (HTTP 200)
+docs: https://newtqnia.com/en/connect
+note: >-
+  derive-oauth-scopes.py found no oauth2 securitySchemes because the published OpenAPI
+  declares none - the REST contract is keyless. The OAuth surface belongs to the MCP
+  server and its scopes were read directly from the live RFC 8414 / RFC 9728 discovery
+  documents, not inferred.
+
+authorization_server: https://newtqnia.com
+protected_resource: https://newtqnia.com/mcp
+flows:
+  authorization_code:
+    authorization_url: https://newtqnia.com/oauth/authorize
+    token_url: https://newtqnia.com/oauth/token
+    refresh_supported: true
+    pkce_required_methods: [S256]
+
+scopes:
+- name: mcp:read
+  description: >-
+    Read-only access to published NewTqnia content over MCP - recent news, a single
+    article, a story timeline, glossary terminology and explainers, each as title,
+    summary and canonical URL. This is what a signed-in reader's assistant receives.
+  source: oauth-authorization-server scopes_supported
+  maps_to_tools: [server_status, get_recent_news, get_news_by_id, get_timeline_by_id, search_terminology, search_explainers]
+- name: mcp:write
+  description: >-
+    Write access backing the editor/administrator content-drafting workflow the provider
+    documents in llms.txt. No write tool is exposed in the anonymous tools/list result -
+    all six live tools are annotated readOnlyHint:true - so the write surface this scope
+    protects is visible only to an authorized editor session.
+  source: oauth-authorization-server scopes_supported
+  maps_to_tools: []
+
+scope_count: 2
+bearer_methods_supported: [header]
+gaps:
+- >-
+  Scopes are coarse: one read and one write for the entire MCP surface, with no per-tool
+  or per-content-type granularity. An agent that only needs the glossary must be granted
+  the same scope as one reading every article.
+- >-
+  There is no published scopes/permissions reference page on the site; the scope names
+  exist only in the discovery document.
+- >-
+  The two scopes are not referenced anywhere in the OpenAPI contract, so the REST and MCP
+  authorization models are documented in entirely separate places.

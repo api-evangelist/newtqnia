@@ -1,0 +1,102 @@
+generated: '2026-08-28'
+method: derived
+source: >-
+  openapi/newtqnia-daily-digest-api.yaml (4xx/5xx responses) enriched by a live probe of
+  https://api.newtqnia.com/v1/news/nope (HTTP 404) and the MCP JSON-RPC error observed at
+  https://newtqnia.com/mcp
+format: custom-json
+rfc9457: false
+
+envelope:
+  media_type: application/json
+  shape: |
+    {
+      "error": {
+        "code": "not_found",
+        "message": "The requested API endpoint was not found.",
+        "documentation": "https://newtqnia.com/en/developers"
+      }
+    }
+  fields:
+  - name: error.code
+    type: string
+    description: Machine-readable slug. Only `not_found` has been observed.
+  - name: error.message
+    type: string
+    description: Human-readable sentence.
+  - name: error.documentation
+    type: string
+    format: uri
+    description: >-
+      Link to the developer documentation. A genuinely agent-friendly touch - the failure
+      response carries its own remediation pointer.
+  declared_in_spec: false
+  note: >-
+    The envelope is consistent in practice but is declared NOWHERE in the OpenAPI
+    contract. Neither the 304 nor the 429 response has a content schema, and no 4xx
+    response other than 429 is documented at all.
+
+problem_types:
+- status: 304
+  name: Not Modified
+  operations: [getTodaysNews, getLatestNews]
+  source: openapi
+  body: none
+  trigger: >-
+    A conditional request whose If-None-Match matches the current weak ETag.
+  remediation: Serve the cached representation.
+  note: Declared in the contract with description "Not modified" and no schema.
+
+- status: 404
+  code: not_found
+  name: Endpoint not found
+  operations: []
+  source: probed
+  evidence: 'GET https://api.newtqnia.com/v1/news/nope -> 404 application/json'
+  message: The requested API endpoint was not found.
+  documentation: https://newtqnia.com/en/developers
+  remediation: >-
+    Check the path against the OpenAPI contract; only /v1/news/today and /v1/news/latest
+    are published.
+  note: >-
+    UNDOCUMENTED. This status appears in no operation's responses map, yet it is the
+    error a caller is most likely to meet.
+
+- status: 429
+  name: Rate limit exceeded
+  operations: [getTodaysNews, getLatestNews]
+  source: openapi
+  body: undocumented
+  trigger: Exceeding the per-IP request budget.
+  headers_expected: [Retry-After, X-RateLimit-Limit, X-RateLimit-Remaining]
+  remediation: >-
+    Honor Retry-After; cache responses for the documented 300-second max-age rather than
+    re-requesting.
+  note: >-
+    Declared with a description and no content schema, so an agent cannot parse the
+    failure. Retry-After is listed in Access-Control-Expose-Headers but is not documented
+    on the 429 in the contract.
+
+mcp_errors:
+- protocol: jsonrpc-2.0
+  code: -32600
+  name: Invalid Request
+  message: A valid session id is REQUIRED for non-initialize requests.
+  http_status: 400
+  source: probed
+  evidence: 'POST https://newtqnia.com/mcp tools/list without Mcp-Session-Id -> HTTP 400'
+  remediation: >-
+    Call initialize first, read Mcp-Session-Id from the response headers, and send it on
+    every subsequent request.
+
+error_count: 4
+gaps:
+- >-
+  No 400, 401, 403 or 5xx response is declared on either operation, and no error schema
+  exists in components. Everything below is inferable only by calling the API and seeing
+  what happens.
+- >-
+  Errors are not RFC 9457 application/problem+json. Adopting it would cost NewTqnia
+  almost nothing - the existing envelope already maps cleanly onto type/title/detail/
+  instance.
+- No published error-code registry beyond the single observed `not_found` slug.

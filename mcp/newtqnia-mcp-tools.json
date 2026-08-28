@@ -1,0 +1,733 @@
+{
+  "tools": [
+    {
+      "name": "server_status",
+      "title": "Server status",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "description": "Returns the current health and timestamp of the NewTqnia server.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "status",
+          "application",
+          "timestamp"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          },
+          "application": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_recent_news",
+      "title": "Get recent published news",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "days": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3650,
+            "default": 90
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500,
+            "default": 100
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "ar",
+              null
+            ],
+            "default": "en",
+            "description": "The calling user's language. Ignored for administrator tokens, which always receive both languages."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Returns published news from the past X days (90 by default). Administrators get bilingual titles, summaries, and URLs; other accounts get a single locale (pass the caller's language in locale) with a title, summary, and canonical URL to read the full article.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "days",
+          "count",
+          "news"
+        ],
+        "properties": {
+          "days": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "news": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "slug",
+                "category",
+                "image_path",
+                "created_at",
+                "updated_at"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "title_en": {
+                  "type": "string"
+                },
+                "title_ar": {
+                  "type": "string"
+                },
+                "summary_en": {
+                  "type": "string"
+                },
+                "summary_ar": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "category_id": {
+                  "type": "integer"
+                },
+                "category": {
+                  "type": "object",
+                  "description": "Full taxonomy record for administrator tokens; {slug, name} for other accounts."
+                },
+                "image_path": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "url_en": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "url_ar": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_news_by_id",
+      "title": "Get a news article by ID",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "news_id"
+        ],
+        "properties": {
+          "news_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The exact NewTqnia article ID."
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "ar",
+              null
+            ],
+            "default": "en",
+            "description": "The calling user's language. Ignored for administrator tokens, which always receive both languages."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Returns one published article. Administrators get the complete bilingual record, including bodies, tags, citations, and access to unpublished drafts. Other accounts get a single locale (pass the caller's language in locale) with a title, summary, and canonical URL to read the full article - never the article body.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "category",
+          "tags",
+          "citations",
+          "image_path",
+          "read_time",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "archived"
+            ]
+          },
+          "editable": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          },
+          "slug": {
+            "type": "string"
+          },
+          "title_en": {
+            "type": "string"
+          },
+          "title_ar": {
+            "type": "string"
+          },
+          "summary_en": {
+            "type": "string"
+          },
+          "summary_ar": {
+            "type": "string"
+          },
+          "body_en": {
+            "type": "string"
+          },
+          "body_ar": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "category": {
+            "type": "object",
+            "description": "Full taxonomy record for administrator tokens; {slug, name} for other accounts."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "title",
+                "url"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "image_path": {
+            "type": "string"
+          },
+          "read_time": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "view_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "url_en": {
+            "type": "string",
+            "format": "uri"
+          },
+          "url_ar": {
+            "type": "string",
+            "format": "uri"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_timeline_by_id",
+      "title": "Get a timeline by ID",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "timeline_id"
+        ],
+        "properties": {
+          "timeline_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The exact NewTqnia timeline ID."
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "ar",
+              null
+            ],
+            "default": "en",
+            "description": "The calling user's language. Ignored for administrator tokens, which always receive both languages."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Returns one published timeline. Administrators get the complete bilingual record with every event, source, and related link, plus access to draft content. Other accounts get a single locale (pass the caller's language in locale): each event's title, summary, media, sources, and related links, plus a canonical URL to the full timeline - never event bodies or the timeline introduction/conclusion.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "timeline_type",
+          "is_ongoing",
+          "start_date",
+          "end_date",
+          "event_count",
+          "events",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          },
+          "title_en": {
+            "type": "string"
+          },
+          "title_ar": {
+            "type": "string"
+          },
+          "summary_en": {
+            "type": "string"
+          },
+          "summary_ar": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "introduction_en": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "introduction_ar": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "conclusion_en": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "conclusion_ar": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timeline_type": {
+            "type": "string"
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "is_ongoing": {
+            "type": "boolean"
+          },
+          "start_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "end_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "event_count": {
+            "type": "integer"
+          },
+          "cover_media": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "url_en": {
+            "type": "string",
+            "format": "uri"
+          },
+          "url_ar": {
+            "type": "string",
+            "format": "uri"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "search_terminology",
+      "title": "Search existing terminology",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 10
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "ar",
+              null
+            ],
+            "default": "en",
+            "description": "The calling user's language. Ignored for administrator tokens, which always receive both languages."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Searches terminology by English term, Arabic term, abbreviation, or slug using normalized, case-insensitive matching. Administrators see draft and published terms with both languages, and should call this before creating a new term to avoid duplicates. Other accounts see published terms only, in a single locale (pass the caller's language in locale), each with a canonical URL to the full definition.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "success",
+          "results"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "slug"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "english_term": {
+                  "type": "string"
+                },
+                "arabic_term": {
+                  "type": "string"
+                },
+                "term": {
+                  "type": "string"
+                },
+                "abbreviation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "draft",
+                    "published"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "search_explainers",
+      "title": "Search existing explainers",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 10
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "en",
+              "ar",
+              null
+            ],
+            "default": "en",
+            "description": "The calling user's language. Ignored for administrator tokens, which always receive both languages."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Searches explainers by English/Arabic title, slug, summary, or content. Administrators see draft and published explainers with both languages, and should call this before creating a new explainer to avoid duplicates. Other accounts see published explainers only, in a single locale (pass the caller's language in locale), each with a canonical URL to the full explainer.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "success",
+          "results"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "slug"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "title_en": {
+                  "type": "string"
+                },
+                "title_ar": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "summary_en": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "summary_ar": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "summary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "draft",
+                    "published"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  ]
+}

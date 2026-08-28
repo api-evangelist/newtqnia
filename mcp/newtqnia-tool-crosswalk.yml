@@ -1,0 +1,97 @@
+generated: '2026-08-28'
+method: derived
+source: mcp/newtqnia-mcp-tools.json (live tools/list) + openapi/newtqnia-daily-digest-api.yaml
+description: >-
+  Binds each live NewTqnia MCP tool to the OpenAPI operation(s) that back it. The two
+  surfaces are NOT projections of one another: the REST Daily Digest API publishes two
+  read operations over articles only, while the MCP server reaches four content types
+  (news, timelines, terminology, explainers) and addresses single records by id. The
+  MCP surface is materially larger than the published REST contract.
+
+surfaces:
+  openapi:
+    file: openapi/newtqnia-daily-digest-api.yaml
+    servers:
+    - https://api.newtqnia.com
+    - https://newtqnia.com
+    gated: false
+    note: Public and keyless; X-API-Key is an optional attribution identifier, not a gate.
+  graphql:
+    endpoint: null
+    note: No GraphQL surface; https://newtqnia.com/graphql returned 404 (HTML shell).
+  mcp:
+    url: https://newtqnia.com/mcp
+    gated: partially
+    note: >-
+      Discovery (initialize + tools/list) is anonymous and returned 200. Tool INVOCATION
+      requires a personal ntq_ key or an OAuth 2.1 token, so schemas below are the
+      provider's real published schemas, not inferred ones.
+
+crosswalk:
+- tool: get_recent_news
+  category: content-read
+  rest:
+  - getLatestNews
+  binding: partial
+  confidence: high
+  note: >-
+    Both return a list of recently published articles. Divergent on three axes: the tool
+    takes `days` (1-3650, default 90) and `limit` up to 500 where REST caps `limit` at 10
+    and has no date window; REST takes a `category` slug filter the tool does not expose;
+    the tool can return bilingual fields (title_en/title_ar) for administrator tokens
+    where REST is always single-locale. Shared parameter: locale (en|ar).
+- tool: get_news_by_id
+  category: content-read
+  rest: []
+  binding: none
+  confidence: high
+  note: >-
+    The REST contract publishes no per-article path. An agent can only reach a single
+    article over REST by filtering a digest response client-side on Article.id.
+- tool: server_status
+  category: operations
+  rest: []
+  binding: none
+  confidence: high
+  note: No health/status operation is published in the OpenAPI contract.
+
+mcp_only:
+- tool: get_news_by_id
+  reason: No `/v1/news/{id}` operation exists in the published OpenAPI.
+- tool: get_timeline_by_id
+  reason: >-
+    Story timelines (https://newtqnia.com/en/timelines) are an MCP-and-web-only content
+    type; the REST Daily Digest API exposes articles only.
+- tool: search_terminology
+  reason: >-
+    The bilingual glossary (https://newtqnia.com/en/terminology) has no REST operation.
+    This is the only full-text search capability the provider exposes to a machine.
+- tool: search_explainers
+  reason: >-
+    Explainers (https://newtqnia.com/en/explainers) have no REST operation.
+- tool: server_status
+  reason: No published health-check operation in the REST contract.
+
+rest_only:
+- operationId: getTodaysNews
+  reason: >-
+    "Today" is defined by the Asia/Dubai day boundary and is a first-class REST
+    collection. The MCP surface has no day-boundary concept - get_recent_news windows on
+    a `days` integer instead, so an agent on MCP cannot reproduce the editorial
+    "today" digest exactly.
+- operationId: getLatestNews
+  reason: >-
+    Partially covered by get_recent_news, but REST-only for the `category` slug filter
+    and for keyless access (the tool always requires a credential to invoke).
+
+coverage:
+  mcp_tools: 6
+  rest_operations: 2
+  tools_with_rest_binding: 1
+  tools_mcp_only: 5
+  rest_operations_unbound: 1
+  rest_operations_partially_bound: 1
+  note: >-
+    83% of the MCP tool surface has no REST equivalent, and the one REST-only editorial
+    concept (the Asia/Dubai "today" digest) has no MCP equivalent. Neither contract is a
+    superset - an integrator choosing one surface loses real capability either way.

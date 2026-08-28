@@ -1,0 +1,118 @@
+generated: '2026-08-28'
+method: searched
+source: https://newtqnia.com/en/developers + https://newtqnia.com/en/connect + https://newtqnia.com/.well-known/oauth-authorization-server
+docs: https://newtqnia.com/en/connect
+note: >-
+  derive-authentication.py found ZERO securitySchemes because the published OpenAPI 3.1
+  contract declares none - it models the API key as an optional header PARAMETER
+  (components.parameters.ApiKey, X-API-Key, required:false) rather than as a
+  securityScheme. That is a real contract gap, recorded under gaps[] below; this profile
+  is written from the provider's own documentation and from the live OAuth metadata.
+
+summary: >-
+  The REST Daily Digest API is genuinely keyless - the public endpoints answered 200
+  anonymously in our probe. An optional ntq_-prefixed API key plus two optional
+  attribution headers identify the caller for usage accounting. The MCP server is the
+  gated surface: it accepts the same personal API key over X-API-Key or Authorization:
+  Bearer, and additionally supports OAuth 2.1 authorization_code + PKCE for clients that
+  cannot send a custom header.
+
+surfaces:
+- surface: REST Daily Digest API
+  base_url: https://api.newtqnia.com
+  auth_required: false
+  verified: probed
+  evidence: 'GET https://api.newtqnia.com/v1/news/today?limit=1 -> 200 with no credential'
+  schemes:
+  - type: apiKey
+    name: X-API-Key
+    in: header
+    required: false
+    prefix: ntq_
+    purpose: >-
+      Optional traffic identifier. Public endpoints remain accessible without a key. A
+      website origin is treated as verified only when associated with a recognized key.
+  attribution_headers:
+  - name: X-NewTqnia-Application
+    in: header
+    required: false
+    max_length: 120
+    purpose: Caller application name for usage attribution.
+  - name: X-NewTqnia-Website
+    in: header
+    required: false
+    format: uri
+    purpose: Public website origin; verified only when tied to a recognized key.
+
+- surface: MCP server
+  base_url: https://newtqnia.com/mcp
+  auth_required: true
+  auth_required_for: tool invocation only
+  verified: probed
+  evidence: >-
+    initialize and tools/list both returned 200 anonymously; the provider documents that
+    calling a tool requires a personal key or an OAuth token.
+  schemes:
+  - type: apiKey
+    name: X-API-Key
+    in: header
+    prefix: ntq_
+  - type: http
+    scheme: bearer
+    name: Authorization
+    format: 'Bearer ntq_...'
+    note: Same personal key, for clients offering only a bearer-token field.
+  - type: oauth2
+    flow: authorization_code
+    pkce_methods: [S256]
+    authorization_endpoint: https://newtqnia.com/oauth/authorize
+    token_endpoint: https://newtqnia.com/oauth/token
+    issuer: https://newtqnia.com
+    grant_types: [authorization_code, refresh_token]
+    token_endpoint_auth_methods: [client_secret_basic, client_secret_post]
+    authorization_response_iss_parameter_supported: true
+    scopes: [mcp:read, mcp:write]
+    discovery:
+    - https://newtqnia.com/.well-known/oauth-authorization-server
+    - https://newtqnia.com/.well-known/oauth-protected-resource
+
+key_management:
+  where: NewTqnia account profile page
+  docs: https://newtqnia.com/en/connect
+  max_active_keys: 5
+  operations: [create, label, replace, revoke]
+  display: >-
+    The full key value is shown exactly once at creation - the provider states it must be
+    copied immediately.
+  rotation: Self-service replace and revoke at any time.
+  identity_binding: >-
+    Keys are personal and inherit the account's role. A reader key grants read-only,
+    single-locale access to published content; editors and administrators receive the
+    complete bilingual record and a content-drafting workflow.
+
+authorization_model:
+  style: role-derived
+  roles:
+  - name: reader
+    grants: >-
+      Published content only, in one locale, as title + summary + canonical URL. Never
+      the full article body. Cannot create, edit or publish.
+  - name: editor-administrator
+    grants: >-
+      Complete bilingual record including bodies, tags and citations, access to
+      unpublished drafts, and a content-drafting workflow.
+  note: >-
+    Permissions are attached to the ACCOUNT behind the key rather than selected per key,
+    so two keys held by one user are equivalent in power. The OAuth scope pair
+    (mcp:read / mcp:write) is the only place authorization is expressed as a
+    requestable value.
+
+gaps:
+- >-
+  The OpenAPI contract declares no securitySchemes and no security requirement - the
+  optional API key is a plain header parameter. A generator or agent reading the spec
+  alone cannot tell that an authenticated mode exists at all.
+- >-
+  No /.well-known/openid-configuration; OIDC discovery is not offered (OAuth 2.1
+  metadata only, which is correct for MCP).
+- No documented key expiry or automatic rotation policy; keys live until revoked.

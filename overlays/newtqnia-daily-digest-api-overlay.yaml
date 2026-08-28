@@ -1,0 +1,155 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the NewTqnia Daily Digest API
+  version: 1.0.0
+extends: ../openapi/newtqnia-daily-digest-api.yaml
+x-generated: '2026-08-28'
+x-method: derived
+x-source: >-
+  Derived from live probes of https://api.newtqnia.com and https://newtqnia.com/mcp, the
+  developer documentation at https://newtqnia.com/en/developers, and the served OAuth
+  discovery documents. Every action below records something the provider genuinely does
+  but does not state in its contract. The original spec is never mutated.
+actions:
+
+- target: $.info
+  description: Record the required attribution licence condition and the API's own docs.
+  update:
+    x-attribution:
+      required: true
+      text: Powered by NewTqnia
+      url: https://newtqnia.com
+      terms: https://newtqnia.com/en/terms
+      note: >-
+        Terms section 9 requires a visible "Powered by NewTqnia" link and preservation of
+        the returned article URLs. The condition is also carried inside every response as
+        the `attribution` object.
+    x-documentation: https://newtqnia.com/en/developers
+    x-llms-txt: https://newtqnia.com/llms.txt
+
+- target: $.info
+  description: >-
+    Declare the sibling MCP surface, which reaches four content types the REST contract
+    does not expose.
+  update:
+    x-mcp-server:
+      endpoint: https://newtqnia.com/mcp
+      transport: streamable-http
+      auth: [api-key, oauth2-pkce]
+      tools: [server_status, get_recent_news, get_news_by_id, get_timeline_by_id, search_terminology, search_explainers]
+      crosswalk: ../mcp/newtqnia-tool-crosswalk.yml
+
+- target: $.paths['/v1/news/today'].get
+  description: >-
+    Record the Asia/Dubai day boundary as an explicit machine-readable semantic - an agent
+    computing "today" in its own timezone will disagree with this operation.
+  update:
+    x-day-boundary-timezone: Asia/Dubai
+    x-empty-result-behavior: >-
+      Returns a 200 with an empty articles array when nothing has been published today;
+      callers wanting guaranteed content should use getLatestNews.
+
+- target: $.paths['/v1/news/today'].get
+  description: Add the undocumented 404 response observed on the live API.
+  update:
+    responses:
+      '404':
+        description: >-
+          Endpoint not found. Undocumented in the original contract but observed live.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+- target: $.paths['/v1/news/latest'].get
+  description: Add the undocumented 404 response observed on the live API.
+  update:
+    responses:
+      '404':
+        description: >-
+          Endpoint not found. Undocumented in the original contract but observed live.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+
+- target: $.paths['/v1/news/latest'].get
+  description: Record that ETag/Cache-Control are emitted here too, as on getTodaysNews.
+  update:
+    x-response-headers-observed: [ETag, Cache-Control, X-RateLimit-Limit, X-RateLimit-Remaining, X-NewTqnia-Cache]
+
+- target: $.components
+  description: >-
+    Add the error envelope the API actually returns. The original contract declares no
+    error schema anywhere, so no generated client can parse a failure.
+  update:
+    schemas:
+      Error:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [code, message]
+            properties:
+              code:
+                type: string
+                description: Machine-readable slug, e.g. not_found.
+              message:
+                type: string
+              documentation:
+                type: string
+                format: uri
+        x-observed: 'GET https://api.newtqnia.com/v1/news/nope -> 404 application/json'
+
+- target: $.components
+  description: >-
+    Declare the optional API key as a securityScheme. The original contract models it only
+    as a header parameter, so a generator cannot see that an authenticated mode exists.
+  update:
+    securitySchemes:
+      ApiKeyAuth:
+        type: apiKey
+        name: X-API-Key
+        in: header
+        description: >-
+          Optional ntq_-prefixed personal key. Public endpoints remain accessible without
+          it; supplying it associates usage with your account and verifies a website
+          origin. Obtain one at https://newtqnia.com/en/connect.
+      BearerAuth:
+        type: http
+        scheme: bearer
+        description: The same ntq_ key sent as a bearer token.
+
+- target: $.components.schemas.Article.properties.url
+  description: Record that stripping the returned tracking parameters breaches the terms.
+  update:
+    x-preserve-verbatim: true
+    x-note: >-
+      Returned with utm_source=newtqnia_api&utm_medium=api&utm_campaign=daily_digest_api.
+      Terms section 9 requires the returned URL be preserved as-is.
+
+- target: $.components.schemas.Digest
+  description: Record the `usage` object present in live responses but absent from the schema.
+  update:
+    x-additional-observed-properties:
+      usage:
+        type: object
+        properties:
+          notice:
+            type: string
+            example: Display "Powered by NewTqnia" with a visible link when presenting this content.
+          terms_url:
+            type: string
+            format: uri
+
+- target: $.servers
+  description: >-
+    Note which server is canonical, since both are declared and only one is the documented
+    base.
+  update:
+    x-canonical: https://api.newtqnia.com
+    x-note: >-
+      https://newtqnia.com is declared as a legacy compatibility endpoint. The developer
+      documentation names https://api.newtqnia.com/v1 as the base URL, and repair-api-bases
+      confirms agreement across apis.yml, _original and servers[].

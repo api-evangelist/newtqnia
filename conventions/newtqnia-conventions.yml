@@ -1,0 +1,171 @@
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://newtqnia.com/en/developers, openapi/newtqnia-daily-digest-api.yaml, and live
+  response headers observed on https://api.newtqnia.com/v1/news/today
+
+auth_style:
+  summary: >-
+    Keyless by default. An optional ntq_-prefixed key in X-API-Key identifies the caller
+    for attribution; the MCP surface uses the same key or OAuth 2.1 + PKCE.
+  see: authentication/newtqnia-authentication.yml
+
+versioning:
+  style: url-path
+  current: v1
+  path_prefix: /v1
+  contract_version: 1.1.0
+  echoed_in_body: true
+  body_field: api_version
+  note: >-
+    Every response carries api_version:"v1" as a const, so a consumer can assert the
+    contract version from the payload itself, not just the URL. The OpenAPI info.version
+    (1.1.0) tracks the contract document; the path segment tracks the wire format.
+
+pagination:
+  style: none
+  params: [limit]
+  limit_min: 1
+  limit_max: 10
+  limit_default: 10
+  cursor: null
+  total_count: false
+  note: >-
+    There is no pagination. `limit` caps a response at 10 articles and there is no offset,
+    page, cursor or next-link, so the REST API cannot be walked backwards through the
+    archive - it is a rolling window only. An agent needing history must use the MCP
+    get_recent_news tool, whose `days` window reaches 3650 and whose `limit` reaches 500.
+  links_present: true
+  links_field: _links
+  links_note: >-
+    _links is a self/documentation/openapi map, not a pagination control - self points at
+    the exact query just made, documentation at the developer page and openapi at the spec.
+
+filtering:
+  params:
+  - name: locale
+    values: [en, ar]
+    default: en
+  - name: category
+    values: category slug
+    note: Optional; slugs are enumerated at https://newtqnia.com/en/categories
+
+field_expansion:
+  supported: false
+  note: Responses are fixed-shape; there is no fields/expand/include parameter.
+
+localization:
+  locales: [en, ar]
+  default: en
+  direction_field: direction
+  direction_values: [ltr, rtl]
+  note: >-
+    The response declares its own text direction, so a client rendering Arabic gets the
+    RTL signal from the payload rather than having to infer it from the locale. This is
+    unusually considerate for a small API and is worth calling out.
+
+timezone:
+  day_boundary: Asia/Dubai
+  body_field: timezone
+  const: Asia/Dubai
+  note: >-
+    /v1/news/today is defined by the Asia/Dubai calendar day, not UTC. The llms.txt states
+    article dates use UTC. Timestamps in observed responses carry a +04:00 offset. An
+    agent computing "today" in its own zone will disagree with the API for part of each day.
+
+caching:
+  etag: true
+  etag_form: weak
+  etag_example_shape: 'W/"<40-hex>"'
+  cache_control: 'max-age=300, public, s-maxage=300, stale-while-revalidate=60'
+  conditional_requests: If-None-Match
+  not_modified_status: 304
+  declared_in_spec: true
+  probe_note: >-
+    The contract declares 304 on both operations and ETag/Cache-Control response headers
+    are really emitted. Our own conditional probe (re-sending the returned weak validator
+    as If-None-Match) came back 200 rather than 304 on one attempt; we did not retry, so
+    we record what we saw rather than concluding the validator is broken.
+  provider_guidance: >-
+    "Cache responses and honor ETag and Cache-Control" - the documented mitigation for
+    rate limiting.
+
+cors:
+  allow_origin: '*'
+  allow_methods: [GET, OPTIONS]
+  allow_headers: [Accept, If-None-Match, Authorization, X-API-Key, X-NewTqnia-Application, X-NewTqnia-Website]
+  expose_headers: [ETag, X-NewTqnia-Cache, X-RateLimit-Limit, X-RateLimit-Remaining, Retry-After]
+  max_age: 86400
+  note: Fully open CORS - the API is designed to be called directly from a browser.
+
+request_id_tracing:
+  supported: false
+  header: null
+  note: >-
+    No X-Request-Id / correlation header is emitted. The only per-response identifier is
+    the Cloudflare cf-ray value, which is edge infrastructure, not a provider-supported
+    support handle.
+
+error_envelope:
+  shape: '{"error": {"code": "<slug>", "message": "<human text>", "documentation": "<url>"}}'
+  content_type: application/json
+  rfc9457: false
+  observed: 'GET https://api.newtqnia.com/v1/news/nope -> 404'
+  note: >-
+    A consistent custom envelope that helpfully carries a documentation URL, but it is not
+    application/problem+json and the shape is not declared anywhere in the OpenAPI
+    contract - the 429 and 304 responses have no content schema at all.
+  see: errors/newtqnia-problem-types.yml
+
+rate_limit_signaling:
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, Retry-After]
+  status: 429
+  see: rate-limits/newtqnia-rate-limits.yml
+
+attribution:
+  required: true
+  text: Powered by NewTqnia
+  url: https://newtqnia.com
+  enforced_in_payload: true
+  payload_fields: [attribution.text, attribution.url, attribution.required, usage.notice, usage.terms_url]
+  terms: https://newtqnia.com/en/terms
+  note: >-
+    Unusual and load-bearing: the licence condition travels INSIDE every response. The
+    attribution object is a required property of the Digest schema, and live responses add
+    a `usage` object repeating the notice and linking the terms. Article URLs are returned
+    with utm_source=newtqnia_api tracking parameters that section 9 of the terms requires
+    be preserved. An agent that strips them is in breach of the terms, not merely impolite.
+
+idempotency:
+  supported: na
+  reason: read-only-api
+  note: >-
+    Every published REST operation is a GET and every live MCP tool is annotated
+    readOnlyHint:true / idempotentHint:true / destructiveHint:false. There is no write
+    surface for a public or reader credential, so an idempotency key would have nothing to
+    protect. GET semantics are natively idempotent.
+
+dry_run_mode:
+  supported: na
+  reason: read-only-api
+
+reversibility:
+  applicable: false
+  grade: na
+  reason: read-only-api
+  write_surfaces: []
+  note: >-
+    Nothing a public or reader-scoped agent can call changes provider state, so there is
+    nothing to reverse. All six MCP tools carry destructiveHint:false, and both OpenAPI
+    operations are GETs. An editor/administrator content-drafting workflow protected by the
+    mcp:write scope is referenced in the provider's llms.txt, but it exposes no tool in the
+    anonymous tools/list result and its operations, reversal paths and windows are not
+    published - so no reversal window is asserted here. `na` rather than a zero: there is
+    no write action for an agent to take back.
+
+cross_links:
+  errors: errors/newtqnia-problem-types.yml
+  lifecycle: lifecycle/newtqnia-lifecycle.yml
+  authentication: authentication/newtqnia-authentication.yml
+  rate_limits: rate-limits/newtqnia-rate-limits.yml
+  data_model: data-model/newtqnia-data-model.yml

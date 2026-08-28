@@ -1,0 +1,69 @@
+generated: '2026-08-28'
+method: searched
+source: https://raw.githubusercontent.com/newtqnia/newtqnia-python/main/CHANGELOG.md
+note: >-
+  NewTqnia publishes NO API changelog - https://newtqnia.com/en/changelog returns 404 and
+  no dated release notes appear on the developer page. The only dated, structured release
+  history the provider publishes is per-SDK, in the GitHub repositories. This artifact
+  records that history honestly rather than asserting an API changelog that does not exist.
+
+api_changelog:
+  present: false
+  url: null
+  probed:
+  - url: https://newtqnia.com/en/changelog
+    status: 404
+  current_contract_version: 1.1.0
+  note: >-
+    The OpenAPI contract is at info.version 1.1.0, which implies at least one revision
+    after 1.0.0, but no note explains what changed.
+
+sdk_changelogs:
+- package: newtqnia (PyPI)
+  scheme: semver
+  url: https://github.com/newtqnia/newtqnia-python/blob/main/CHANGELOG.md
+  current_version: 1.0.1
+  entries:
+  - version: 1.0.1
+    date: '2026-08-21'
+    breaking: false
+    additions: false
+    highlights:
+    - Refresh the PyPI README badges after the initial release became available.
+    - Use absolute documentation and repository links so they work correctly on PyPI.
+  - version: 1.0.0
+    date: '2026-08-21'
+    breaking: false
+    additions: true
+    highlights:
+    - Initial sync and async Python SDK.
+    - Typed models, retries, timeouts, error metadata, attributed HTML, and JSON-LD rendering.
+
+- package: newtqnia-node
+  scheme: semver
+  url: https://github.com/newtqnia/newtqnia-node
+  current_version: 2.0.0
+  released: '2026-07-26'
+  changelog_file: null
+  note: >-
+    Reached a major 2.0.0 the same day 1.0.0 shipped (npm records 1.0.0, 1.0.1, 1.1.0,
+    1.1.1 and 2.0.0 all on 2026-07-26). A major bump implies a breaking change, and no
+    changelog file documents it.
+
+- package: newtqnia/php
+  current_version: v1.0.0
+  released: '2026-07-26'
+  changelog_file: null
+
+- package: github.com/newtqnia/newtqnia-go
+  current_version: v1.0.0
+  released: '2026-08-21'
+  changelog_file: null
+
+gaps:
+- >-
+  No API changelog at all. A consumer cannot learn what changed between contract 1.0.0
+  and 1.1.0.
+- >-
+  Only one of four SDKs (Python) ships a CHANGELOG.md; the Node SDK went to 2.0.0 with no
+  documented migration note.

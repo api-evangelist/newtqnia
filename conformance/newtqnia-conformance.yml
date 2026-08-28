@@ -1,0 +1,186 @@
+generated: '2026-08-28'
+method: probed
+source: >-
+  Live probes of newtqnia.com and api.newtqnia.com plus
+  openapi/newtqnia-daily-digest-api.yaml, mcp/newtqnia-mcp-tools.json and the served
+  /.well-known OAuth documents
+
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: >-
+    https://newtqnia.com/openapi.yaml (HTTP 200) parses with openapi: 3.1.0, 2 operations,
+    both with operationId, summary, tagged responses and reusable components. Also served
+    at https://api.newtqnia.com/openapi.yaml.
+
+- id: oauth2
+  conforms: true
+  evidence: >-
+    RFC 6749 authorization_code + refresh_token grants published at
+    https://newtqnia.com/.well-known/oauth-authorization-server (HTTP 200).
+
+- id: oauth2.1-pkce
+  conforms: true
+  evidence: >-
+    code_challenge_methods_supported: ["S256"] - PKCE with the mandatory S256 method, as
+    OAuth 2.1 and the MCP authorization spec require.
+
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-authorization-server returns a valid metadata document (issuer,
+    authorization_endpoint, token_endpoint, response_types_supported, grant_types_supported,
+    scopes_supported, token_endpoint_auth_methods_supported) with HTTP 200.
+
+- id: rfc9207
+  name: OAuth 2.0 Authorization Server Issuer Identification
+  conforms: true
+  evidence: 'authorization_response_iss_parameter_supported: true in the metadata document.'
+
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-protected-resource returns HTTP 200 with resource
+    https://newtqnia.com/mcp, authorization_servers ["https://newtqnia.com"],
+    scopes_supported [mcp:read, mcp:write] and bearer_methods_supported ["header"]. This
+    is the document an MCP client needs to complete an authorization challenge.
+
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  version_negotiated: '2025-11-25'
+  transport: streamable-http
+  evidence: >-
+    POST https://newtqnia.com/mcp initialize -> HTTP 200 with serverInfo "NewTqnia MCP"
+    1.0.0 and capabilities {logging, completions, tools}; tools/list -> HTTP 200 with 6
+    tools, each carrying a JSON Schema inputSchema AND outputSchema plus MCP tool
+    annotations. Session handling enforced via Mcp-Session-Id.
+
+- id: json-schema-2020-12
+  conforms: true
+  evidence: >-
+    OpenAPI 3.1 uses JSON Schema 2020-12 by default; the MCP tool schemas are explicit
+    JSON Schema objects with type/properties/required/additionalProperties.
+
+- id: rfc9110-conditional-requests
+  name: HTTP conditional requests (ETag / If-None-Match)
+  conforms: partial
+  evidence: >-
+    Live responses emit a weak ETag (W/"<hex>") and Cache-Control, both are exposed via
+    CORS, and the contract declares 304 on both operations. Our single conditional probe
+    returned 200 rather than 304, so end-to-end validator behaviour is recorded as
+    unverified rather than conformant.
+
+- id: rfc9457
+  name: Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors use a custom {"error":{code,message,documentation}} envelope with content-type
+    application/json, not application/problem+json. Observed on
+    https://api.newtqnia.com/v1/news/nope (404).
+
+- id: rfc9116
+  name: security.txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on both newtqnia.com and api.newtqnia.com.
+
+- id: rfc9727
+  name: api-catalog well-known URI
+  conforms: false
+  evidence: /.well-known/api-catalog returns 404 (HTML page) on newtqnia.com.
+
+- id: llmstxt
+  name: llms.txt
+  conforms: true
+  evidence: >-
+    https://newtqnia.com/llms.txt returns HTTP 200 text/markdown, correctly structured
+    with an H1, a blockquote summary, and sectioned link lists including an "Optional"
+    section per the llms.txt convention. An expanded llms-full.txt index is also linked.
+
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json both return 404 on
+    newtqnia.com and api.newtqnia.com.
+
+- id: pagination
+  conforms: false
+  evidence: >-
+    No offset, page, cursor or link-relation pagination; `limit` (1-10) is the only
+    control and _links carries self/documentation/openapi rather than next/prev.
+
+- id: idempotency
+  conforms: na
+  evidence: Read-only API - all published operations are GETs. See conventions/.
+
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404; OAuth 2.1 metadata only.
+
+- id: graphql
+  conforms: false
+  evidence: https://newtqnia.com/graphql returns 404 (HTML shell); no GraphQL surface.
+
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document and no webhook surface. The provider's only push-shaped surfaces
+    are RSS/Atom feeds (/en/feed.xml, /ar/feed.xml) and sitemaps, which are subscription
+    formats for readers, not an event contract for integrators.
+
+domain_standards:
+- id: rss
+  name: RSS 2.0 news syndication
+  conforms: true
+  market: news-publishing
+  evidence: >-
+    https://newtqnia.com/en/feed.xml and https://newtqnia.com/ar/feed.xml are published
+    per-locale feeds, declared in llms.txt as "The latest published articles".
+  why_it_matters: >-
+    RSS is the incumbent machine-readable interchange format of the news industry. A
+    consumer with an existing feed reader or aggregator integrates with no bespoke
+    connector.
+
+- id: google-news-sitemap
+  name: Google News sitemap protocol
+  conforms: true
+  market: news-publishing
+  evidence: >-
+    https://newtqnia.com/news-sitemap.xml, declared in both robots.txt and llms.txt as
+    "Articles published in the last 48 hours" - the 48-hour window is the Google News
+    sitemap specification's own constraint, so this is the real protocol, not a generic
+    sitemap.
+
+- id: sitemaps-xml
+  name: sitemaps.org XML protocol
+  conforms: true
+  market: web-publishing
+  evidence: https://newtqnia.com/sitemap.xml, declared in robots.txt.
+
+- id: schema-org-jsonld
+  name: schema.org JSON-LD structured data
+  conforms: partial
+  market: news-publishing
+  evidence: >-
+    The official Python SDK advertises "JSON-LD rendering" in its 1.0.0 changelog entry,
+    indicating structured-data output is a first-class SDK feature. Not verified in the
+    API payload itself, which is a plain custom JSON envelope with no @context.
+
+compliance:
+  certifications: []
+  programs: []
+  note: >-
+    No SOC 2, ISO 27001, PCI, HIPAA or FedRAMP claim, no trust center, and no bug bounty
+    program. probe-security-programs.py returned vdp=none trust=none. This is expected for
+    an independent newsroom with a free read-only public API and is not a finding against
+    the provider - but it does mean no Compliance or TrustCenter pointer is emitted.
+
+summary:
+  conformant: 11
+  partial: 2
+  non_conformant: 8
+  not_applicable: 1

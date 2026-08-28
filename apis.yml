@@ -1,13 +1,35 @@
 name: NewTqnia | Technology News, AI and Innovation
-description: >-
-  An independent bilingual (English/Arabic) technology newsroom covering AI, cybersecurity, developer tools, science,
-  and global innovation. Provides a free public REST news API (Daily Digest), an OpenAPI 3.1 contract, a hosted MCP
-  server, an llms.txt, and official SDKs.
+aid: newtqnia
+description: 'An independent bilingual (English/Arabic) technology newsroom covering artificial intelligence, cybersecurity,
+  developer tools, science, space, robotics, energy and global technology policy. NewTqnia ships a genuinely keyless public
+  REST news API (the Daily Digest, at api.newtqnia.com), an OpenAPI 3.1 contract, a hosted Streamable-HTTP MCP server whose
+  tools/list is anonymously discoverable, an llms.txt, OAuth 2.1 + PKCE discovery documents, an embeddable news widget with
+  a WordPress plugin, and four MIT-licensed first-party SDKs for Python, Node/TypeScript, PHP and Go. Every API response carries
+  its own attribution licence: displaying ''Powered by NewTqnia'' with a visible link and preserving the returned article
+  URLs is a condition of use.'
 url: https://raw.githubusercontent.com/api-evangelist/newtqnia-technology-news-ai-and-innovation/refs/heads/main/apis.yml
 created: '2026-08-28'
 modified: '2026-08-28'
 specificationVersion: '0.21'
 tags:
+- News API
+- News
+- Technology
+- Artificial Intelligence
+- Cybersecurity
+- Developer Tools
+- Cloud Computing
+- Media
+- Publishing
+- Bilingual
+apis:
+- name: NewTqnia Daily Digest API
+  description: Public read-only JSON REST API exposing today's and the latest published articles. No API key required for
+    the initial release; optional headers for application/website attribution. Rate limited to 60 requests/minute per IP with
+    ETag and Cache-Control support.
+  humanURL: https://newtqnia.com/en/developers
+  baseURL: https://api.newtqnia.com
+  tags:
   - News API
   - News
   - Technology
@@ -18,39 +40,89 @@ tags:
   - Media
   - Publishing
   - Bilingual
-apis:
-  - name: NewTqnia Daily Digest API
-    description: >-
-      Public read-only JSON REST API exposing today's and the latest published articles. No API key required for the
-      initial release; optional headers for application/website attribution. Rate limited to 60 requests/minute per IP
-      with ETag and Cache-Control support.
-    humanURL: https://newtqnia.com/en/developers
-    baseURL: https://api.newtqnia.com
-    tags:
-      - News API
-      - News
-      - Technology
-      - Artificial Intelligence
-      - Cybersecurity
-      - Developer Tools
-      - Cloud Computing
-      - Media
-      - Publishing
-      - Bilingual
-    properties:
-      - type: OpenAPI
-        url: https://newtqnia.com/openapi.yaml
-      - type: Documentation
-        url: https://newtqnia.com/en/developers
-      - type: LLMsTxt
-        url: https://newtqnia.com/llms.txt
-      - type: MCPServer
-        url: https://newtqnia.com/mcp
+  properties:
+  - type: OpenAPI
+    url: openapi/newtqnia-daily-digest-api.yaml
+  - type: OpenAPI
+    url: https://newtqnia.com/openapi.yaml
+  - type: Documentation
+    url: https://newtqnia.com/en/developers
+  - type: APIReference
+    url: https://newtqnia.com/en/developers
+  - type: LLMsTxt
+    url: https://newtqnia.com/llms.txt
+  - type: MCPServer
+    url: https://newtqnia.com/mcp
+    description: 'Live MCP: 6 tools (server_status, get_recent_news, get_news_by_id, get_timeline_by_id, search_terminology,
+      search_explainers). Requires an initialize handshake for a session id; an unauthenticated GET returns an OAuth 401.
+      Verified 2026-08-28.'
+  - type: ToolCrosswalk
+    url: mcp/newtqnia-tool-crosswalk.yml
+  - type: Overlay
+    url: overlays/newtqnia-daily-digest-api-overlay.yaml
+  - type: Examples
+    url: examples/_index.yml
+  - type: DataModel
+    url: data-model/newtqnia-data-model.yml
 maintainers:
-  - FN: NewTqnia | Technology News, AI and Innovation
-    url: https://newtqnia.com
+- FN: NewTqnia
+  email: hello@newtqnia.com
+  url: https://newtqnia.com
 generated:
   by: apis.io/add
   model: claude-opus-4-8
   confidence: 95
   at: '2026-08-28T08:51:08.962Z'
+common:
+- type: DeveloperPortal
+  url: https://newtqnia.com/en/developers
+- type: GettingStarted
+  url: https://newtqnia.com/en/connect
+- type: Support
+  url: https://newtqnia.com/en/contact
+- type: GitHubOrganization
+  url: https://github.com/newtqnia
+- type: SignUp
+  url: https://newtqnia.com/en/register
+- type: Login
+  url: https://newtqnia.com/en/login
+- type: TermsOfService
+  url: https://newtqnia.com/en/terms
+- type: PrivacyPolicy
+  url: https://newtqnia.com/en/privacy
+- type: Packages
+  url: packages/newtqnia-packages.yml
+- type: SDKs
+  url: packages/newtqnia-packages.yml
+- type: Components
+  url: components/newtqnia-components.yml
+- type: WellKnown
+  url: well-known/newtqnia-well-known.yml
+- type: Authentication
+  url: authentication/newtqnia-authentication.yml
+- type: OAuthScopes
+  url: scopes/newtqnia-scopes.yml
+- type: Conventions
+  url: conventions/newtqnia-conventions.yml
+- type: ErrorCatalog
+  url: errors/newtqnia-problem-types.yml
+- type: RateLimits
+  url: rate-limits/newtqnia-rate-limits.yml
+- type: Plans
+  url: plans/newtqnia-plans-pricing.yml
+- type: Lifecycle
+  url: lifecycle/newtqnia-lifecycle.yml
+- type: ChangeLog
+  url: changelog/newtqnia-changelog.yml
+- type: Conformance
+  url: conformance/newtqnia-conformance.yml
+- type: DomainSecurity
+  url: security/newtqnia-domain-security.yml
+- type: AgentSkill
+  url: skills/_index.yml
+image: https://newtqnia.com/storage/social/ce46e49c898edb9ac69deab4c3a4cf41bf569102-1200x630.jpg
+x-enrichment:
+  date: '2026-08-28'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v1

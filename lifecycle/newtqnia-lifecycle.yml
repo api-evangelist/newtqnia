@@ -1,0 +1,99 @@
+generated: '2026-08-28'
+method: searched
+source: >-
+  https://newtqnia.com/en/developers, https://newtqnia.com/en/terms,
+  openapi/newtqnia-daily-digest-api.yaml, and probes of the usual status/changelog paths
+
+versioning:
+  scheme: url-path-major
+  current: v1
+  contract_version: 1.1.0
+  path_prefix: /v1
+  echoed_in_response: true
+  response_field: api_version
+  policy_published: false
+  note: >-
+    A major version segment exists in the path and the contract carries a semver document
+    version (1.1.0), but NO versioning policy is published - nothing states what
+    constitutes a breaking change, how long a major version is supported, or how a v2
+    would be introduced.
+
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No deprecation policy, no RFC 8594 Sunset or Deprecation headers observed on live
+    responses, and no operation in the OpenAPI contract carries `deprecated: true`.
+    Section 8 of the terms reserves a broad right to "change features ... or temporarily
+    suspend access" without notice, which is the closest thing to a stated posture and is
+    the opposite of a deprecation commitment.
+  material_risk: >-
+    The developer page describes the keyless mode as free "for the initial release",
+    signalling the auth model may change, with no published notice period.
+
+status_page:
+  present: false
+  url: null
+  probed:
+  - url: https://newtqnia.com/en/status
+    status: 404
+  note: >-
+    No status page. The nearest substitute is the MCP `server_status` tool, which returns
+    health and a timestamp - but it requires a credential to invoke and is therefore not
+    a public status surface.
+
+sla:
+  published: false
+  uptime_target: null
+  support_commitment: null
+  note: >-
+    Terms section 8 states the service is provided "as available" and disclaims
+    responsibility for interruption. No uptime target, no support response time.
+
+support:
+  channel: contact-form
+  url: https://newtqnia.com/en/contact
+  email: hello@newtqnia.com
+  email_source: npm/PyPI package author_email for the official SDKs
+  github_issues:
+  - https://github.com/newtqnia/newtqnia-python/issues
+
+roadmap:
+  published: false
+  probed:
+  - url: https://newtqnia.com/en/roadmap
+    status: 404
+
+release_history:
+  api_contract:
+  - version: 1.1.0
+    date: null
+    note: Current published OpenAPI info.version; no dated release note accompanies it.
+  sdk_releases:
+  - package: newtqnia-node
+    version: 2.0.0
+    date: '2026-07-26'
+  - package: newtqnia/php
+    version: v1.0.0
+    date: '2026-07-26'
+  - package: newtqnia (PyPI)
+    version: 1.0.1
+    date: '2026-08-21'
+  - package: github.com/newtqnia/newtqnia-go
+    version: v1.0.0
+    date: '2026-08-21'
+
+maturity: early
+maturity_evidence: >-
+  Every SDK first shipped within the last five weeks, the contract is at 1.1.0, and the
+  provider itself calls the current auth posture the "initial release".
+
+gaps:
+- No status page and no public health endpoint.
+- No deprecation or versioning policy, and no Sunset/Deprecation header support.
+- No SLA or support commitment.
+- No API-level changelog (SDK changelogs exist per repository).

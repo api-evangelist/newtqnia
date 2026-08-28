@@ -1,0 +1,84 @@
+generated: '2026-08-28'
+method: probed
+source: >-
+  Live response headers from https://api.newtqnia.com/v1/news/today and
+  https://newtqnia.com/mcp, cross-read against https://newtqnia.com/en/developers
+docs: https://newtqnia.com/en/developers
+
+limits:
+- scope: per-ip
+  surface: REST Daily Digest API
+  window: 1 minute
+  limit: 60
+  documented_limit: 60
+  observed_header_limit: 20
+  burst: null
+  method: searched
+  source: >-
+    https://newtqnia.com/en/developers states "60 requests per minute per IP" in both the
+    header summary ("Default limit 60 req / minute") and the Usage limits section.
+  discrepancy: >-
+    OBSERVED DISAGREEMENT. Live unauthenticated responses from api.newtqnia.com carried
+    `x-ratelimit-limit: 20` (with x-ratelimit-remaining counting down 19, 18 across
+    successive calls), not 60. Our probe did not exhaust the bucket, so we cannot say
+    which number the enforcement actually uses - only that the runtime signal an agent
+    reads and the number the docs state do not match. An agent that trusts the docs will
+    plan for 3x the budget the header advertises.
+
+- scope: per-session
+  surface: MCP server (https://newtqnia.com/mcp)
+  window: unstated
+  limit: 120
+  method: probed
+  source: 'Live header on POST /mcp: x-ratelimit-limit: 120, x-ratelimit-remaining: 119'
+  note: >-
+    Not documented anywhere on the site; discovered only by reading the response headers.
+    The window is not published and cannot be determined from a single observation.
+
+response_headers:
+- name: X-RateLimit-Limit
+  observed: true
+  values_seen: ['20 (api.newtqnia.com)', '120 (newtqnia.com/mcp)']
+- name: X-RateLimit-Remaining
+  observed: true
+  note: Decrements per request; observed 19 then 18 on consecutive calls.
+- name: Retry-After
+  observed: false
+  note: >-
+    Not present on 2xx responses, but explicitly named in the API's
+    Access-Control-Expose-Headers list, so it is intended to appear on exhaustion.
+- name: X-NewTqnia-Cache
+  observed: true
+  values_seen: [MISS]
+  note: >-
+    Not a rate-limit header, but exposed alongside them and relevant to budget - a HIT is
+    served from cache.
+
+exposed_via_cors: >-
+  access-control-expose-headers: ETag, X-NewTqnia-Cache, X-RateLimit-Limit,
+  X-RateLimit-Remaining, Retry-After - so a browser-side agent can read every one of them.
+
+exhaustion:
+  status_code: 429
+  source: >-
+    Declared in the OpenAPI contract on both operations ('429': Rate limit exceeded).
+  body: >-
+    Not documented. The API's generic error envelope is
+    {"error":{"code":...,"message":...,"documentation":...}} (observed on a 404), so a 429
+    body most likely follows that shape, but this was not verified - we did not exhaust
+    the limit.
+  retry_guidance: >-
+    The docs say "Cache responses and honor ETag and Cache-Control" rather than
+    prescribing a backoff. Responses carry cache-control: max-age=300, public,
+    s-maxage=300, stale-while-revalidate=60, so a 5-minute cache is the intended
+    mitigation.
+
+limit_count: 2
+gaps:
+- >-
+  The documented per-IP limit (60/min) contradicts the live X-RateLimit-Limit header (20).
+- The MCP server's limit of 120 is undocumented and its window is unpublished.
+- >-
+  The 429 response body shape is not documented in the OpenAPI contract - both operations
+  declare '429: Rate limit exceeded' with no content schema, so an agent cannot parse the
+  failure programmatically.
