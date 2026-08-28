@@ -1,0 +1,56 @@
+name: NewTqnia | Technology News, AI and Innovation
+description: >-
+  An independent bilingual (English/Arabic) technology newsroom covering AI, cybersecurity, developer tools, science,
+  and global innovation. Provides a free public REST news API (Daily Digest), an OpenAPI 3.1 contract, a hosted MCP
+  server, an llms.txt, and official SDKs.
+url: https://raw.githubusercontent.com/api-evangelist/newtqnia-technology-news-ai-and-innovation/refs/heads/main/apis.yml
+created: '2026-08-28'
+modified: '2026-08-28'
+specificationVersion: '0.21'
+tags:
+  - News API
+  - News
+  - Technology
+  - Artificial Intelligence
+  - Cybersecurity
+  - Developer Tools
+  - Cloud Computing
+  - Media
+  - Publishing
+  - Bilingual
+apis:
+  - name: NewTqnia Daily Digest API
+    description: >-
+      Public read-only JSON REST API exposing today's and the latest published articles. No API key required for the
+      initial release; optional headers for application/website attribution. Rate limited to 60 requests/minute per IP
+      with ETag and Cache-Control support.
+    humanURL: https://newtqnia.com/en/developers
+    baseURL: https://api.newtqnia.com
+    tags:
+      - News API
+      - News
+      - Technology
+      - Artificial Intelligence
+      - Cybersecurity
+      - Developer Tools
+      - Cloud Computing
+      - Media
+      - Publishing
+      - Bilingual
+    properties:
+      - type: OpenAPI
+        url: https://newtqnia.com/openapi.yaml
+      - type: Documentation
+        url: https://newtqnia.com/en/developers
+      - type: LLMsTxt
+        url: https://newtqnia.com/llms.txt
+      - type: MCPServer
+        url: https://newtqnia.com/mcp
+maintainers:
+  - FN: NewTqnia | Technology News, AI and Innovation
+    url: https://newtqnia.com
+generated:
+  by: apis.io/add
+  model: claude-opus-4-8
+  confidence: 95
+  at: '2026-08-28T08:51:08.962Z'
