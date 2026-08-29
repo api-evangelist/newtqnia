@@ -1,0 +1,28 @@
+{
+  "provider": "newtqnia",
+  "sources": [
+    "_original/newtqnia-daily-digest-api.yaml",
+    "newtqnia-daily-digest-api.yaml"
+  ],
+  "outputs": [
+    "newtqnia-news-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/newtqnia-daily-digest-api.yaml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "newtqnia-daily-digest-api.yaml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "newtqnia-daily-digest-api.yaml: tagged paths GET /v1/news/today -> News",
+    "newtqnia-daily-digest-api.yaml: tagged paths GET /v1/news/latest -> News",
+    "newtqnia-daily-digest-api.yaml: declared missing tag: News",
+    "newtqnia-daily-digest-api.yaml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "newtqnia-daily-digest-api.yaml: tagged paths GET /v1/news/today -> News",
+    "newtqnia-daily-digest-api.yaml: tagged paths GET /v1/news/latest -> News",
+    "newtqnia-daily-digest-api.yaml: declared missing tag: News",
+    "tag 'News' spans 2 source specs (newtqnia-daily-digest-api.yaml, newtqnia-daily-digest-api.yaml): per-path servers applied"
+  ],
+  "skipped": []
+}

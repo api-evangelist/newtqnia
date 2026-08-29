@@ -34,43 +34,25 @@ tags:
 - Publishing
 - Bilingual
 apis:
-- name: NewTqnia Daily Digest API
-  description: Public read-only JSON REST API exposing today's and the latest published articles. No API key required for
-    the initial release; optional headers for application/website attribution. Rate limited to 60 requests/minute per IP with
-    ETag and Cache-Control support.
+- aid: newtqnia:newtqnia-news-api
+  name: NewTqnia | Technology News, AI and Innovation News API
+  description: >-
+    The News API from NewTqnia | Technology News, AI and Innovation — 2 operation(s) for news.
   humanURL: https://newtqnia.com/en/developers
   baseURL: https://api.newtqnia.com
   tags:
-  - News API
   - News
-  - Technology
-  - Artificial Intelligence
-  - Cybersecurity
-  - Developer Tools
-  - Cloud Computing
-  - Media
-  - Publishing
-  - Bilingual
   properties:
   - type: OpenAPI
-    url: openapi/newtqnia-daily-digest-api.yaml
-  - type: OpenAPI
-    url: https://newtqnia.com/openapi.yaml
+    url: openapi/newtqnia-news-api-openapi.yml
   - type: Documentation
     url: https://newtqnia.com/en/developers
   - type: APIReference
     url: https://newtqnia.com/en/developers
   - type: LLMsTxt
     url: https://newtqnia.com/llms.txt
-  - type: MCPServer
-    url: https://newtqnia.com/mcp
-    description: 'Live MCP: 6 tools (server_status, get_recent_news, get_news_by_id, get_timeline_by_id, search_terminology,
-      search_explainers). Requires an initialize handshake for a session id; an unauthenticated GET returns an OAuth 401.
-      Verified 2026-08-28.'
   - type: ToolCrosswalk
     url: mcp/newtqnia-tool-crosswalk.yml
-  - type: Overlay
-    url: overlays/newtqnia-daily-digest-api-overlay.yaml
   - type: Examples
     url: examples/_index.yml
   - type: DataModel
@@ -85,6 +67,10 @@ generated:
   confidence: 95
   at: '2026-08-28T08:51:08.962Z'
 common:
+- type: MCPServer
+  url: https://newtqnia.com/mcp
+- type: Overlay
+  url: overlays/newtqnia-daily-digest-api-overlay.yaml
 - type: DeveloperPortal
   url: https://newtqnia.com/en/developers
 - type: GettingStarted
