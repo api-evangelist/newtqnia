@@ -8,6 +8,17 @@ description: 'An independent bilingual (English/Arabic) technology newsroom cove
   its own attribution licence: displaying ''Powered by NewTqnia'' with a visible link and preserving the returned article
   URLs is a condition of use.'
 url: https://raw.githubusercontent.com/api-evangelist/newtqnia-technology-news-ai-and-innovation/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 created: '2026-08-28'
 modified: '2026-08-28'
 specificationVersion: '0.21'
