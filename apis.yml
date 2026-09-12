@@ -83,6 +83,8 @@ generated:
   confidence: 95
   at: '2026-08-28T08:51:08.962Z'
 common:
+- type: Website
+  url: https://www.newtqnia.com/
 - type: MCPServer
   url: https://newtqnia.com/mcp
 - type: Overlay
