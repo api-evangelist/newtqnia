@@ -1,0 +1,30 @@
+# Front Door AI Index — newtqnia — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: newtqnia
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.newtqnia.com
+  final_host: newtqnia.com
+  ownership: own
+  owner: newtqnia
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 25
+  host_score: 25
+  density: 23.15
+  words: 1080
+  tiers:
+    agentic: 7
+    core: 18
+    model: 0
+  ambiguous: 11
+  top_terms:
+    AI: 13
+    AI agent: 6
+    agent: 6
+    artificial intelligence: 5
+    intelligence: 5
+    AI assistant: 1

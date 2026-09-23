@@ -1,12 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Newtqnia News API
+  title: NewTqnia Daily Digest News API
   version: 1.1.0
+  description: Public, read-only access to localized NewTqnia technology-news summaries.
+  termsOfService: https://newtqnia.com/en/terms
   contact:
     name: NewTqnia
     url: https://newtqnia.com/en/contact
-  termsOfService: https://newtqnia.com/en/terms
-  description: 'Operations tagged News across 2 of this provider''s published API definitions: newtqnia-daily-digest-api.yaml, newtqnia-daily-digest-api.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.newtqnia.com
   description: Canonical API endpoint
@@ -44,11 +44,6 @@ paths:
           description: Rate limit exceeded
       tags:
       - News
-    servers:
-    - url: https://api.newtqnia.com
-      description: Canonical API endpoint
-    - url: https://newtqnia.com
-      description: Legacy compatibility endpoint
   /v1/news/latest:
     get:
       operationId: getLatestNews
@@ -73,22 +68,38 @@ paths:
           description: Rate limit exceeded
       tags:
       - News
-    servers:
-    - url: https://api.newtqnia.com
-      description: Canonical API endpoint
-    - url: https://newtqnia.com
-      description: Legacy compatibility endpoint
 components:
-  headers:
-    ETag:
-      schema:
-        type: string
-      description: Validator for conditional requests using If-None-Match.
-    CacheControl:
-      schema:
-        type: string
-      description: Public caching instructions.
   parameters:
+    Application:
+      name: X-NewTqnia-Application
+      in: header
+      required: false
+      schema:
+        type: string
+        maxLength: 120
+      description: Optional caller application name for usage attribution.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 10
+    Category:
+      name: category
+      in: query
+      schema:
+        type: string
+      description: Optional category slug.
+    Website:
+      name: X-NewTqnia-Website
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uri
+      description: Optional public website origin. It is verified only when associated with a recognized key.
     Locale:
       name: locale
       in: query
@@ -98,28 +109,6 @@ components:
         - en
         - ar
         default: en
-    Category:
-      name: category
-      in: query
-      schema:
-        type: string
-      description: Optional category slug.
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 10
-        default: 10
-    Application:
-      name: X-NewTqnia-Application
-      in: header
-      required: false
-      schema:
-        type: string
-        maxLength: 120
-      description: Optional caller application name for usage attribution.
     ApiKey:
       name: X-API-Key
       in: header
@@ -127,14 +116,15 @@ components:
       schema:
         type: string
       description: Optional traffic identifier. Public endpoints remain accessible without a key.
-    Website:
-      name: X-NewTqnia-Website
-      in: header
-      required: false
+  headers:
+    CacheControl:
       schema:
         type: string
-        format: uri
-      description: Optional public website origin. It is verified only when associated with a recognized key.
+      description: Public caching instructions.
+    ETag:
+      schema:
+        type: string
+      description: Validator for conditional requests using If-None-Match.
   schemas:
     LinkLabel:
       type: object
@@ -147,46 +137,6 @@ components:
         url:
           type: string
           format: uri
-    Article:
-      type: object
-      required:
-      - id
-      - title
-      - summary
-      - category
-      - image
-      - url
-      - published_at
-      - read_time
-      properties:
-        id:
-          type: integer
-        title:
-          type: string
-        summary:
-          type: string
-        category:
-          type: object
-          required:
-          - slug
-          - name
-          properties:
-            slug:
-              type: string
-            name:
-              type: string
-        image:
-          type: string
-          format: uri
-        url:
-          type: string
-          format: uri
-        published_at:
-          type: string
-          format: date-time
-        read_time:
-          type: integer
-          minimum: 1
     Digest:
       type: object
       required:
@@ -253,6 +203,43 @@ components:
           additionalProperties:
             type: string
             format: uri
-x-refined-from:
-- newtqnia-daily-digest-api.yaml
-- newtqnia-daily-digest-api.yaml
+    Article:
+      type: object
+      required:
+      - id
+      - title
+      - summary
+      - category
+      - image
+      - url
+      - published_at
+      - read_time
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        summary:
+          type: string
+        category:
+          type: object
+          required:
+          - slug
+          - name
+          properties:
+            slug:
+              type: string
+            name:
+              type: string
+        image:
+          type: string
+          format: uri
+        url:
+          type: string
+          format: uri
+        published_at:
+          type: string
+          format: date-time
+        read_time:
+          type: integer
+          minimum: 1
