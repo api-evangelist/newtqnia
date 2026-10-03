@@ -70,46 +70,17 @@ paths:
       - News
 components:
   schemas:
-    Article:
+    LinkLabel:
       type: object
       required:
-      - id
-      - title
-      - summary
-      - category
-      - image
+      - name
       - url
-      - published_at
-      - read_time
       properties:
-        id:
-          type: integer
-        title:
+        name:
           type: string
-        summary:
-          type: string
-        category:
-          type: object
-          required:
-          - slug
-          - name
-          properties:
-            slug:
-              type: string
-            name:
-              type: string
-        image:
-          type: string
-          format: uri
         url:
           type: string
           format: uri
-        published_at:
-          type: string
-          format: date-time
-        read_time:
-          type: integer
-          minimum: 1
     Digest:
       type: object
       required:
@@ -176,17 +147,46 @@ components:
           additionalProperties:
             type: string
             format: uri
-    LinkLabel:
+    Article:
       type: object
       required:
-      - name
+      - id
+      - title
+      - summary
+      - category
+      - image
       - url
+      - published_at
+      - read_time
       properties:
-        name:
+        id:
+          type: integer
+        title:
           type: string
+        summary:
+          type: string
+        category:
+          type: object
+          required:
+          - slug
+          - name
+          properties:
+            slug:
+              type: string
+            name:
+              type: string
+        image:
+          type: string
+          format: uri
         url:
           type: string
           format: uri
+        published_at:
+          type: string
+          format: date-time
+        read_time:
+          type: integer
+          minimum: 1
   headers:
     CacheControl:
       schema:
@@ -197,6 +197,21 @@ components:
         type: string
       description: Validator for conditional requests using If-None-Match.
   parameters:
+    Category:
+      name: category
+      in: query
+      schema:
+        type: string
+      description: Optional category slug.
+    Locale:
+      name: locale
+      in: query
+      schema:
+        type: string
+        enum:
+        - en
+        - ar
+        default: en
     Application:
       name: X-NewTqnia-Application
       in: header
@@ -220,15 +235,6 @@ components:
       schema:
         type: string
       description: Optional traffic identifier. Public endpoints remain accessible without a key.
-    Locale:
-      name: locale
-      in: query
-      schema:
-        type: string
-        enum:
-        - en
-        - ar
-        default: en
     Website:
       name: X-NewTqnia-Website
       in: header
@@ -237,9 +243,3 @@ components:
         type: string
         format: uri
       description: Optional public website origin. It is verified only when associated with a recognized key.
-    Category:
-      name: category
-      in: query
-      schema:
-        type: string
-      description: Optional category slug.
