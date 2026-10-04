@@ -69,18 +69,54 @@ paths:
       tags:
       - News
 components:
+  parameters:
+    Application:
+      name: X-NewTqnia-Application
+      in: header
+      required: false
+      schema:
+        type: string
+        maxLength: 120
+      description: Optional caller application name for usage attribution.
+    Locale:
+      name: locale
+      in: query
+      schema:
+        type: string
+        enum:
+        - en
+        - ar
+        default: en
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 10
+    Website:
+      name: X-NewTqnia-Website
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uri
+      description: Optional public website origin. It is verified only when associated with a recognized key.
+    ApiKey:
+      name: X-API-Key
+      in: header
+      required: false
+      schema:
+        type: string
+      description: Optional traffic identifier. Public endpoints remain accessible without a key.
+    Category:
+      name: category
+      in: query
+      schema:
+        type: string
+      description: Optional category slug.
   schemas:
-    LinkLabel:
-      type: object
-      required:
-      - name
-      - url
-      properties:
-        name:
-          type: string
-        url:
-          type: string
-          format: uri
     Digest:
       type: object
       required:
@@ -187,6 +223,17 @@ components:
         read_time:
           type: integer
           minimum: 1
+    LinkLabel:
+      type: object
+      required:
+      - name
+      - url
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
   headers:
     CacheControl:
       schema:
@@ -196,50 +243,3 @@ components:
       schema:
         type: string
       description: Validator for conditional requests using If-None-Match.
-  parameters:
-    Category:
-      name: category
-      in: query
-      schema:
-        type: string
-      description: Optional category slug.
-    Locale:
-      name: locale
-      in: query
-      schema:
-        type: string
-        enum:
-        - en
-        - ar
-        default: en
-    Application:
-      name: X-NewTqnia-Application
-      in: header
-      required: false
-      schema:
-        type: string
-        maxLength: 120
-      description: Optional caller application name for usage attribution.
-    Limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 10
-        default: 10
-    ApiKey:
-      name: X-API-Key
-      in: header
-      required: false
-      schema:
-        type: string
-      description: Optional traffic identifier. Public endpoints remain accessible without a key.
-    Website:
-      name: X-NewTqnia-Website
-      in: header
-      required: false
-      schema:
-        type: string
-        format: uri
-      description: Optional public website origin. It is verified only when associated with a recognized key.
