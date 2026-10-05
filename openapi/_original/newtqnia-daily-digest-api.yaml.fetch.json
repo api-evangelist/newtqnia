@@ -1,0 +1,12 @@
+{
+ "url": "https://api.newtqnia.com/openapi.yaml",
+ "requested_url": "https://api.newtqnia.com/openapi.yaml",
+ "status": 200,
+ "content_type": "application/octet-stream",
+ "bytes": 5020,
+ "sha256": "0c0906f78d356c1c4d799d018cd11605bd917b4d6849603cb76313a86595a52d",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
