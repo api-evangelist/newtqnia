@@ -36,7 +36,7 @@ accessModel:
   generated: '2026-09-02'
   method: derived
 created: '2026-08-28'
-modified: '2026-08-28'
+modified: '2026-10-06'
 specificationVersion: '0.21'
 tags:
 - News API
@@ -83,6 +83,8 @@ generated:
   confidence: 95
   at: '2026-08-28T08:51:08.962Z'
 common:
+- url: https://newtqnia.com/en/feed.xml
+  type: BlogRSS
 - type: Website
   url: https://www.newtqnia.com/
 - type: MCPServer
