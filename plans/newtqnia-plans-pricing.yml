@@ -71,3 +71,28 @@ gaps:
 - >-
   There is no stated SLA, support commitment or paid path for a business that wants a
   quota above 60/min.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  units: []
+  plans:
+  - name: Public API
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: Registered reader (API key / MCP)
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: Editor / administrator
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
