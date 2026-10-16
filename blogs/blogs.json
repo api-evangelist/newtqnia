@@ -1,0 +1,14 @@
+{
+  "repo": "newtqnia",
+  "feeds": [
+    {
+      "source": "https://newtqnia.com/en/feed.xml",
+      "feed_url": "https://newtqnia.com/en/feed.xml",
+      "title": "",
+      "saved": 9,
+      "method": "feed"
+    }
+  ],
+  "post_count": 9,
+  "fetched": "2026-10-10T13:15:00Z"
+}
