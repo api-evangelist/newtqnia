@@ -52,16 +52,17 @@ authentication:
       reader tokens receive mcp:read only.
 tools:
 - name: server_status
-  title: Server status
   description: Returns the current health and timestamp of the NewTqnia server.
+  title: Server status
   read_only: true
   idempotent: true
   destructive: false
   inputs: []
 - name: get_recent_news
-  title: Get recent published news
   description: Returns published news from the past X days (90 by default). Administrators get bilingual
-    titles, summaries and URLs; other accounts get a single locale.
+    titles, summaries, and URLs; other accounts get a single locale (pass the caller's language in locale)
+    with a title, summary, and canonical URL to read the full article.
+  title: Get recent published news
   read_only: true
   idempotent: true
   destructive: false
@@ -70,10 +71,11 @@ tools:
   - limit
   - locale
 - name: get_news_by_id
+  description: Returns one published article. Administrators get the complete bilingual record, including
+    bodies, tags, citations, and access to unpublished drafts. Other accounts get a single locale (pass
+    the caller's language in locale) with a title, summary, and canonical URL to read the full article
+    - never the article body.
   title: Get a news article by ID
-  description: Returns one published article. Administrators get the complete bilingual record including
-    bodies, tags and citations; other accounts get title, summary and the canonical URL - never the article
-    body.
   read_only: true
   idempotent: true
   destructive: false
@@ -81,9 +83,11 @@ tools:
   - news_id
   - locale
 - name: get_timeline_by_id
+  description: 'Returns one published timeline. Administrators get the complete bilingual record with
+    every event, source, and related link, plus access to draft content. Other accounts get a single locale
+    (pass the caller''s language in locale): each event''s title, summary, media, sources, and related
+    links, plus a canonical URL to the full timeline - never event bodies or the timeline introduction/conclusion.'
   title: Get a timeline by ID
-  description: Returns one published timeline with its event sequence, sources and related links, plus
-    a canonical URL to the full timeline.
   read_only: true
   idempotent: true
   destructive: false
@@ -91,9 +95,11 @@ tools:
   - timeline_id
   - locale
 - name: search_terminology
+  description: Searches terminology by English term, Arabic term, abbreviation, or slug using normalized,
+    case-insensitive matching. Administrators see draft and published terms with both languages, and should
+    call this before creating a new term to avoid duplicates. Other accounts see published terms only,
+    in a single locale (pass the caller's language in locale), each with a canonical URL to the full definition.
   title: Search existing terminology
-  description: Searches the bilingual glossary by English term, Arabic term, abbreviation or slug using
-    normalized case-insensitive matching.
   read_only: true
   idempotent: true
   destructive: false
@@ -102,8 +108,11 @@ tools:
   - limit
   - locale
 - name: search_explainers
+  description: Searches explainers by English/Arabic title, slug, summary, or content. Administrators
+    see draft and published explainers with both languages, and should call this before creating a new
+    explainer to avoid duplicates. Other accounts see published explainers only, in a single locale (pass
+    the caller's language in locale), each with a canonical URL to the full explainer.
   title: Search existing explainers
-  description: Searches explainers by English/Arabic title, slug, summary or content.
   read_only: true
   idempotent: true
   destructive: false
@@ -149,3 +158,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 6
