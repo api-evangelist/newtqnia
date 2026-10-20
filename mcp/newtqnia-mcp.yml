@@ -2,13 +2,10 @@ generated: '2026-08-28'
 method: probed
 source: https://newtqnia.com/mcp (JSON-RPC initialize + tools/list, anonymous, HTTP 200)
 name: NewTqnia MCP
-description: >-
-  Hosted Streamable-HTTP MCP server exposing NewTqnia's published bilingual technology
-  newsroom to AI assistants: recent news, a single article by id, a story timeline by id,
-  the bilingual terminology glossary, and the explainer library. Every read-only tool
-  returns a title, a summary and a canonical URL back to the full page on newtqnia.com;
-  article bodies are never returned to non-administrator tokens.
-
+description: 'Hosted Streamable-HTTP MCP server exposing NewTqnia''s published bilingual technology newsroom
+  to AI assistants: recent news, a single article by id, a story timeline by id, the bilingual terminology
+  glossary, and the explainer library. Every read-only tool returns a title, a summary and a canonical
+  URL back to the full page on newtqnia.com; article bodies are never returned to non-administrator tokens.'
 deployment:
   mode: remote
   endpoint: https://newtqnia.com/mcp
@@ -16,7 +13,6 @@ deployment:
   package: null
   auth: api-key
   verified: probed
-
 server:
   name: NewTqnia MCP
   version: 1.0.0
@@ -29,13 +25,10 @@ server:
   - logging
   - completions
   - tools
-  notes: >-
-    initialize returns 200 anonymously and issues an Mcp-Session-Id; tools/list then
-    returns the full tool set with both inputSchema and outputSchema WITHOUT credentials.
-    A non-initialize request sent without a session id is rejected with JSON-RPC -32600
-    ("A valid session id is REQUIRED for non-initialize requests"). Calling a tool is
-    what requires a credential, not discovering one.
-
+  notes: initialize returns 200 anonymously and issues an Mcp-Session-Id; tools/list then returns the
+    full tool set with both inputSchema and outputSchema WITHOUT credentials. A non-initialize request
+    sent without a session id is rejected with JSON-RPC -32600 ("A valid session id is REQUIRED for non-initialize
+    requests"). Calling a tool is what requires a credential, not discovering one.
 authentication:
   primary:
     type: api-key
@@ -54,11 +47,9 @@ authentication:
     scopes:
     - mcp:read
     - mcp:write
-    note: >-
-      OAuth 2.1 + PKCE is offered for clients (some ChatGPT connector setups) that
-      cannot send a custom header. mcp:write is reserved for editor/administrator
-      accounts and the content-drafting workflow; reader tokens receive mcp:read only.
-
+    note: OAuth 2.1 + PKCE is offered for clients (some ChatGPT connector setups) that cannot send a custom
+      header. mcp:write is reserved for editor/administrator accounts and the content-drafting workflow;
+      reader tokens receive mcp:read only.
 tools:
 - name: server_status
   title: Server status
@@ -69,64 +60,92 @@ tools:
   inputs: []
 - name: get_recent_news
   title: Get recent published news
-  description: >-
-    Returns published news from the past X days (90 by default). Administrators get
-    bilingual titles, summaries and URLs; other accounts get a single locale.
+  description: Returns published news from the past X days (90 by default). Administrators get bilingual
+    titles, summaries and URLs; other accounts get a single locale.
   read_only: true
   idempotent: true
   destructive: false
-  inputs: [days, limit, locale]
+  inputs:
+  - days
+  - limit
+  - locale
 - name: get_news_by_id
   title: Get a news article by ID
-  description: >-
-    Returns one published article. Administrators get the complete bilingual record
-    including bodies, tags and citations; other accounts get title, summary and the
-    canonical URL - never the article body.
+  description: Returns one published article. Administrators get the complete bilingual record including
+    bodies, tags and citations; other accounts get title, summary and the canonical URL - never the article
+    body.
   read_only: true
   idempotent: true
   destructive: false
-  inputs: [news_id, locale]
+  inputs:
+  - news_id
+  - locale
 - name: get_timeline_by_id
   title: Get a timeline by ID
-  description: >-
-    Returns one published timeline with its event sequence, sources and related links,
-    plus a canonical URL to the full timeline.
+  description: Returns one published timeline with its event sequence, sources and related links, plus
+    a canonical URL to the full timeline.
   read_only: true
   idempotent: true
   destructive: false
-  inputs: [timeline_id, locale]
+  inputs:
+  - timeline_id
+  - locale
 - name: search_terminology
   title: Search existing terminology
-  description: >-
-    Searches the bilingual glossary by English term, Arabic term, abbreviation or slug
-    using normalized case-insensitive matching.
+  description: Searches the bilingual glossary by English term, Arabic term, abbreviation or slug using
+    normalized case-insensitive matching.
   read_only: true
   idempotent: true
   destructive: false
-  inputs: [query, limit, locale]
+  inputs:
+  - query
+  - limit
+  - locale
 - name: search_explainers
   title: Search existing explainers
   description: Searches explainers by English/Arabic title, slug, summary or content.
   read_only: true
   idempotent: true
   destructive: false
-  inputs: [query, limit, locale]
-
+  inputs:
+  - query
+  - limit
+  - locale
 tool_count: 6
 schemas_file: mcp/newtqnia-mcp-tools.json
-schemas_note: >-
-  The verbatim tools/list result is saved alongside this manifest. Every tool carries a
-  complete JSON Schema inputSchema AND outputSchema with additionalProperties:false, and
-  MCP tool annotations (readOnlyHint/destructiveHint/idempotentHint/openWorldHint). All
-  six are readOnlyHint:true and destructiveHint:false - this server has no write surface
-  for a reader token.
-
-robots_note: >-
-  https://newtqnia.com/robots.txt carries `Disallow: /mcp`. That excludes the endpoint
-  from search crawling; it does not gate MCP clients, which reached it successfully.
-
+schemas_note: The verbatim tools/list result is saved alongside this manifest. Every tool carries a complete
+  JSON Schema inputSchema AND outputSchema with additionalProperties:false, and MCP tool annotations (readOnlyHint/destructiveHint/idempotentHint/openWorldHint).
+  All six are readOnlyHint:true and destructiveHint:false - this server has no write surface for a reader
+  token.
+robots_note: 'https://newtqnia.com/robots.txt carries `Disallow: /mcp`. That excludes the endpoint from
+  search crawling; it does not gate MCP clients, which reached it successfully.'
 x-evidence:
   fetched: '2026-08-28'
   initialize_status: 200
   tools_list_status: 200
   rate_limit_header_observed: 'x-ratelimit-limit: 120'
+tool_quality:
+  tool_count: 6
+  tokens_total: 2581
+  tokens_per_tool_median: 443
+  heavy_tools: []
+  heavy_tool_count: 0
+  params_total: 13
+  params_undescribed: 6
+  params_described_pct: 53.8
+  tools_with_undescribed_params: 3
+  tools_annotated: 6
+  annotated_pct: 100.0
+  state_changing_unhinted: []
+  tools_missing_schema: 0
+  short_descriptions: 0
+  duplicate_descriptions: 0
+  duplicate_names: 0
+  nonportable_names: []
+  output_schema_count: 6
+  token_estimate: chars/3.6 of each compact tool definition
+  source: mcp/newtqnia-mcp-tools.json
+  measured: '2026-10-20'
+  scored: false
+  note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
+    from Glimind's agent-readiness audit.
