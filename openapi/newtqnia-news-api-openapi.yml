@@ -243,3 +243,9 @@ components:
       schema:
         type: string
       description: Optional category slug.
+x-provenance:
+  method: harvested
+  publisher: NewTqnia | Technology News, AI and Innovation
+  source: https://api.newtqnia.com/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
