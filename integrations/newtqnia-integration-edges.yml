@@ -151,6 +151,37 @@ edges:
     detected: '2026-10-21'
   detected_by: sweep-browser-extension-stores.py
   first_seen: '2026-10-21'
+- partner_name: JSR
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript, JSR)
+  evidence: https://jsr.io/@newtqnia/newtqnia-node
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: JSR (jsr.io public API JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@newtqnia/newtqnia-node'
+      version: 2.0.0
+      released: '2026-07-26'
+      released_field: versions.createdAt
+      lapsed: false
+      page: https://jsr.io/@newtqnia/newtqnia-node
+      github_repository: https://github.com/newtqnia/newtqnia-node
+      repo_leg: github-org:newtqnia
+      publisher_leg: org:newtqnia
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months or archived'
+    detected_by: sweep-jsr-javascript-registry.py
+    detected: '2026-10-23'
+  detected_by: sweep-jsr-javascript-registry.py
+  first_seen: '2026-10-23'
 generated: '2026-10-14'
 method: searched
 checked:
@@ -165,6 +196,8 @@ checked:
 - https://addons.mozilla.org/api/v5/addons/addon/<slug>/
 - https://addons.mozilla.org/api/v5/addons/search/?type=extension&app=firefox
 - https://chromewebstore.google.com/sitemap
+- https://jsr.io/api/packages
+- https://jsr.io/api/scopes
 source:
 - https://registry.npmjs.org
 - https://pypi.org/pypi

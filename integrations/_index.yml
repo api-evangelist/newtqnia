@@ -142,3 +142,34 @@
     detected: '2026-10-21'
   status: not-a-workflow
   arazzo: null
+- slug: newtqnia-jsr
+  label: JSR
+  partner_name: JSR
+  category: official SDK (JavaScript/TypeScript, JSR)
+  type: register
+  channel: package-registry
+  evidence: https://jsr.io/@newtqnia/newtqnia-node
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: JSR (jsr.io public API JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@newtqnia/newtqnia-node'
+      version: 2.0.0
+      released: '2026-07-26'
+      released_field: versions.createdAt
+      lapsed: false
+      page: https://jsr.io/@newtqnia/newtqnia-node
+      github_repository: https://github.com/newtqnia/newtqnia-node
+      repo_leg: github-org:newtqnia
+      publisher_leg: org:newtqnia
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months or archived'
+    detected_by: sweep-jsr-javascript-registry.py
+    detected: '2026-10-23'
+  status: not-a-workflow
+  arazzo: null
